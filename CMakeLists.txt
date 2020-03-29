@@ -46,14 +46,21 @@ add_definitions(
 	-D_CRT_SECURE_NO_WARNINGS
 )
 
-
+include_directories(${CMAKE_SOURCE_DIR}/common)
 SOURCE_GROUP(common REGULAR_EXPRESSION ".*/common/.*" )
-SOURCE_GROUP(shaders REGULAR_EXPRESSION ".*/.*shader$" )
+
+
 
 # Add executables here
 # START REPEAT
 	add_executable(hello_window 
 		src/hello_window/hello_window.cpp
+		common/glfw_config.cpp
+		common/glfw_config.hpp
+		common/glew_config.cpp
+		common/glew_config.hpp
+		common/controls.cpp
+		common/controls.hpp
 	)
 	target_link_libraries(hello_window
 		${ALL_LIBS}
@@ -61,3 +68,16 @@ SOURCE_GROUP(shaders REGULAR_EXPRESSION ".*/.*shader$" )
 	# Xcode and Visual working directories
 	set_target_properties(hello_window PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")
 # END REPEAT
+
+# # START REPEAT
+# 	add_executable(triangle 
+# 		src/triangle/triangle.cpp
+# 		include/ogl_config.cpp
+# 		include/ogl_config.hpp
+# 	)
+# 	target_link_libraries(triangle
+# 		${ALL_LIBS}
+# 	)
+# 	# Xcode and Visual working directories
+# 	set_target_properties(triangle PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")
+# # END REPEAT

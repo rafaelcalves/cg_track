@@ -46,18 +46,18 @@ add_definitions(
 	-D_CRT_SECURE_NO_WARNINGS
 )
 
-# Xcode and Visual working directories
-set_target_properties(hello_window PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")
 
 SOURCE_GROUP(common REGULAR_EXPRESSION ".*/common/.*" )
 SOURCE_GROUP(shaders REGULAR_EXPRESSION ".*/.*shader$" )
 
 # Add executables here
 # START REPEAT
-add_executable(hello_window 
-	src/hello_window/hello_window.cpp
-)
-target_link_libraries(hello_window
-	${ALL_LIBS}
-)
+	add_executable(hello_window 
+		src/hello_window/hello_window.cpp
+	)
+	target_link_libraries(hello_window
+		${ALL_LIBS}
+	)
+	# Xcode and Visual working directories
+	set_target_properties(hello_window PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")
 # END REPEAT

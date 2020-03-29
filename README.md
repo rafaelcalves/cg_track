@@ -36,9 +36,9 @@ cmake CMakeLists.txt
 make -j4
 ```
 
-#### [GLFW](https://github.com/glfw/glfw)
+#### [GLFW](https://github.com/glfw/glfw) and [GLM](https://github.com/g-truc/glm)
 
-You shouldn't face any issue due to GLFW, but if some information is missing the original repositoty is linked on the title of each dependency.
+You shouldn't face any issue due to GLFW and GLM, but if some information is missing the original repositoty is linked on the title of each dependency.
 
 ### CMake
 

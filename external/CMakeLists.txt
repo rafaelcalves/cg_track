@@ -66,16 +66,15 @@ add_subdirectory( assimp/contrib/zlib )
 
 # Compile without Boost
 include_directories( assimp/code/BoostWorkaround )
-add_definitions( -DASSIMP_BUILD_BOOST_WORKAROUND )
 
 # Compile AssImp
 set( LIB_INSTALL_DIR "lib")
-# set(LIBASSIMP_COMPONENT libassimp3.0-r1270-OGLtuts)
 set(ZLIB_LIBRARIES zlib)
 set(BUILD_STATIC_LIB ON)
-#set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/zlib)
 set(ENABLE_BOOST_WORKAROUND ON)
 set(BUILD_STATIC_LIB ON)
-set(BUILD_ASSIMP_TOOLS  ON)
+set(BUILD_ASSIMP_TOOLS  OFF)
 set(ASSIMP_BUILD_STATIC_LIB ON)
+set(BUILD_FRAMEWORK ON)
+set(ASSIMP_BUILD_BOOST_WORKAROUND)
 add_subdirectory( assimp )

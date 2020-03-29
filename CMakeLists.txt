@@ -46,26 +46,18 @@ add_definitions(
 	-D_CRT_SECURE_NO_WARNINGS
 )
 
-# Tutorial 1
-add_executable(hello_window 
-	src/hello_window.cpp
-)
-target_link_libraries(hello_window
-	${ALL_LIBS}
-)
 # Xcode and Visual working directories
 set_target_properties(hello_window PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")
 
 SOURCE_GROUP(common REGULAR_EXPRESSION ".*/common/.*" )
 SOURCE_GROUP(shaders REGULAR_EXPRESSION ".*/.*shader$" )
 
-
-# if (NOT ${CMAKE_GENERATOR} MATCHES "Xcode" )
-# add_custom_command(
-#    TARGET hello_window POST_BUILD
-#    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/hello_window${CMAKE_EXECUTABLE_SUFFIX}" "${CMAKE_CURRENT_SOURCE_DIR}/hello_window/"
-# )
-# elseif (${CMAKE_GENERATOR} MATCHES "Xcode" )
-
-# endif (NOT ${CMAKE_GENERATOR} MATCHES "Xcode" )
-
+# Add executables here
+# START REPEAT
+add_executable(hello_window 
+	src/hello_window/hello_window.cpp
+)
+target_link_libraries(hello_window
+	${ALL_LIBS}
+)
+# END REPEAT

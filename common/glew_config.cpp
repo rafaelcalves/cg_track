@@ -13,6 +13,6 @@
 int initGlew(){
 	// Initialize GLEW
     char* errorMessage = "Failed to initialize GLEW\n";
-    int result = glewInit() != GLEW_OK;
-    return handleClosingError(result, errorMessage);
+    int expectedResult = glewInit() == GLEW_OK;
+    return handleClosingError(expectedResult, errorMessage);
 }

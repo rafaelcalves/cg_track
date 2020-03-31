@@ -8,7 +8,7 @@ Base enviroment to use on for CG/OpenGL classes.
 
 The environment is based on CMake, it should work fine building anywhere but as we're using [vscode](https://code.visualstudio.com/) this build is based on it.
 
-### vscode extensions
+### VSCode extensions
 
 - [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
 - [CMake](https://marketplace.visualstudio.com/items?itemName=twxs.cmake)
@@ -44,7 +44,7 @@ You shouldn't face any issue due to GLFW and GLM, but if some information is mis
 
 [[Reference video](https://www.youtube.com/watch?v=wP4cwAtU-g8)]
 
-Having instaled CMake extensions, press `F1` to show all commands and select `CMake: Configure` to prepare your environment (for MacOS select `Clang`). You'll probably receive warnings or errors, try to fix them before build any program.
+Having instaled CMake in your machine (e.g.: on mac `brew install cmake`) and also CMake extensions on VSCode, press `F1` to show all commands and select `CMake: Configure` to prepare your environment (for MacOS select `Clang`). You'll probably receive warnings or errors, try to fix them before build any program.
 
 Having sucessfully configured the environment, you're able to build your work.
 

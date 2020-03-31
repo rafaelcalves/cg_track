@@ -51,23 +51,24 @@ add_definitions(
 	-D_CRT_SECURE_NO_WARNINGS
 )
 
-SOURCE_GROUP(common REGULAR_EXPRESSION ".*/common/.*" )
-SOURCE_GROUP(resources REGULAR_EXPRESSION ".*/src/resources/.*" )
-
 set(EXERCISE
 	hello_window
 	triangle
 )
 
 foreach(EXERCISE ${EXERCISE})
+	set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin/${EXERCISE}")
 	file(GLOB SOURCE
 		"src/${EXERCISE}/${EXERCISE}.cpp"
+	)
+	file(GLOB RESOURCES
 		"src/${EXERCISE}/resources/*.fs"
 		"src/${EXERCISE}/resources/*.vs"
 		"src/${EXERCISE}/resources/*.h"
 	)
-	add_executable(${EXERCISE}
+	add_executable(${EXERCISE} 
 		${SOURCE}
+		${RESOURCES}
 		${COMMON}
 	)
 	target_link_libraries(${EXERCISE}
@@ -75,4 +76,5 @@ foreach(EXERCISE ${EXERCISE})
 	)
 	# Xcode and Visual working directories
 	set_target_properties(${EXERCISE} PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")
+	file(COPY "src/${EXERCISE}/resources" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/build/bin/${EXERCISE}")
 endforeach(EXERCISE)

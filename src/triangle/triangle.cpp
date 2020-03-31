@@ -22,8 +22,8 @@ int main()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-
-    Shader ourShader("../src/triangle/resources/shader.vs", "../src/triangle/resources/shader.fs");
+    
+    Shader ourShader("shader.vs", "shader.fs");
    
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------

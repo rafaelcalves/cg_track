@@ -16,6 +16,12 @@ The environment is based on CMake, it should work fine building anywhere but as 
 
 ### Submodules
 
+To clone submodules:
+
+```bash
+git submodule update --init
+```
+
 Project dependencies are being loaded as submodules to ease updates.
 If you face any issue due to any dependency, you probably must as below...
 

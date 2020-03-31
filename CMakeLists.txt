@@ -4,7 +4,6 @@ project (CG_Track)
 
 find_package(OpenGL REQUIRED)
 
-
 if( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
     message( FATAL_ERROR "Please select another Build Directory ! (and give it a clever name, like bin_Visual2012_64bits/)" )
 endif()
@@ -15,27 +14,33 @@ if( CMAKE_BINARY_DIR MATCHES " " )
 	message( "Your Build Directory contains spaces. If you experience problems when compiling, this can be the cause." )
 endif()
 
-
-
 # Compile external dependencies 
 add_subdirectory (external)
-
-if(INCLUDE_DISTRIB)
-	add_subdirectory(distrib)
-endif(INCLUDE_DISTRIB)
 
 include_directories(
 	external/glfw/include/
 	external/glm/
 	external/glew/include/
 	external/assimp/include/
+	common
+	common/glad
+	common/KHR
 	.
 )
-
 set(ALL_LIBS
 	${OPENGL_LIBRARY}
 	glfw
 	GLEW_210
+)
+file(GLOB COMMON
+	"common/*.hpp"
+	"common/*.cpp"
+	"common/*.h"
+	"common/*.c"
+	"common/*/*.hpp"
+	"common/*/*.cpp"
+	"common/*/*.h"
+	"common/*/*.c"
 )
 
 add_definitions(
@@ -46,38 +51,28 @@ add_definitions(
 	-D_CRT_SECURE_NO_WARNINGS
 )
 
-include_directories(${CMAKE_SOURCE_DIR}/common)
 SOURCE_GROUP(common REGULAR_EXPRESSION ".*/common/.*" )
+SOURCE_GROUP(resources REGULAR_EXPRESSION ".*/src/resources/.*" )
 
+set(EXERCISE
+	hello_window
+	triangle
+)
 
-
-# Add executables here
-# START REPEAT
-	add_executable(hello_window 
-		src/hello_window/hello_window.cpp
-		common/glfw_config.cpp
-		common/glfw_config.hpp
-		common/glew_config.cpp
-		common/glew_config.hpp
-		common/controls.cpp
-		common/controls.hpp
+foreach(EXERCISE ${EXERCISE})
+	file(GLOB SOURCE
+		"src/${EXERCISE}/${EXERCISE}.cpp"
+		"src/${EXERCISE}/resources/*.fs"
+		"src/${EXERCISE}/resources/*.vs"
+		"src/${EXERCISE}/resources/*.h"
 	)
-	target_link_libraries(hello_window
+	add_executable(${EXERCISE}
+		${SOURCE}
+		${COMMON}
+	)
+	target_link_libraries(${EXERCISE}
 		${ALL_LIBS}
 	)
 	# Xcode and Visual working directories
-	set_target_properties(hello_window PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")
-# END REPEAT
-
-# # START REPEAT
-# 	add_executable(triangle 
-# 		src/triangle/triangle.cpp
-# 		include/ogl_config.cpp
-# 		include/ogl_config.hpp
-# 	)
-# 	target_link_libraries(triangle
-# 		${ALL_LIBS}
-# 	)
-# 	# Xcode and Visual working directories
-# 	set_target_properties(triangle PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")
-# # END REPEAT
+	set_target_properties(${EXERCISE} PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")
+endforeach(EXERCISE)

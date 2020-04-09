@@ -12,6 +12,7 @@
 
 int initGlew(){
 	// Initialize GLEW
+	glewExperimental = GL_TRUE;
     char* errorMessage = "Failed to initialize GLEW\n";
     int expectedResult = glewInit() == GLEW_OK;
     return handleClosingError(expectedResult, errorMessage);

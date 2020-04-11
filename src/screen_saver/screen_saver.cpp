@@ -1,9 +1,10 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h> /* GLFW helper library */
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 #include <stdio.h>
 #include <math.h>
-#include <common/glfw_config.hpp>
-#include <common/glew_config.hpp>
+#include <common/glew_config.h>
+#include <common/glfw_config.h>
 #include <common/shaders.h>
 
 const glm::vec2 SCREEN_SIZE(800, 600);
@@ -44,19 +45,12 @@ int main () {
 		0.1f, 0.0f, 0.0f, 1.0f
     );
 
-    if(!initGLFW()) return -1;
-    GLFWwindow* window = startWindow(SCREEN_SIZE);
-    if(!isWindowOk(window)) return -1;
+    GlfwConfig glfw;
+    glfw.init(SCREEN_SIZE);
 
-    if(!initGlew()) return -1;
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
-
+    GlewConfig glew;
+    glew.init();
+    
     Shader ourShader("shader.vs", "shader.fs");
 
 	/* get version info */
@@ -115,7 +109,7 @@ int main () {
 	float speed = 1.0f;
 	float lastPosition = 0.0f;
 	ourShader.use();
-	while (!glfwWindowShouldClose (window)) {
+	while (!glfwWindowShouldClose (glfw.getWindow())) {
 	
 		static double previousSeconds = glfwGetTime();
 		double currentSeconds = glfwGetTime();
@@ -142,10 +136,7 @@ int main () {
 		/* update other events like input handling */
 		glfwPollEvents ();
 		/* put the stuff we've been drawing onto the display */
-		glfwSwapBuffers (window);
-		if(GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)){
-			glfwSetWindowShouldClose(window, 1);
-		}
+		glfwSwapBuffers (glfw.getWindow());
 	}
 	
 	/* close GL context and any other GLFW resources */

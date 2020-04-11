@@ -1,8 +1,8 @@
-#include <glad/glad.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <common/glfw_config.hpp>
-#include <common/glew_config.hpp>
+#include <common/glew_config.h>
+#include <common/glfw_config.h>
 #include <common/shaders.h>
 
 // settings
@@ -10,18 +10,11 @@ const glm::vec2 SCREEN_SIZE(800, 600);
 
 int main()
 {
-    if(!initGLFW()) return -1;
-    GLFWwindow* window = startWindow(SCREEN_SIZE);
-    if(!isWindowOk(window)) return -1;
+    GlfwConfig glfw;
+    glfw.init(SCREEN_SIZE);
 
-    if(!initGlew()) return -1;
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
+    GlewConfig glew;
+    glew.init();
     
     Shader ourShader("shader.vs", "shader.fs");
    
@@ -60,12 +53,8 @@ int main()
 
     // render loop
     // -----------
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(glfw.getWindow()))
     {
-        // input
-        // -----
-        processEscInput(window);
-
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -77,7 +66,7 @@ int main()
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(glfw.getWindow());
         glfwPollEvents();
     }
 

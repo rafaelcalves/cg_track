@@ -12,7 +12,7 @@ const char* DEFAULT_WINDOW_TITLE = "LearnOpenGL";
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 int initGLFW() {
-    char* errorMessage = "Failed to initialize GLFW\n";
+    const char* errorMessage = "Failed to initialize GLFW\n";
     int result = glfwInit();
 	return handleClosingError(result, errorMessage);
 }
@@ -33,7 +33,7 @@ GLFWwindow* createWindow(glm::vec2 screen_size) {
     if(!initGLFW()) return NULL;
     configureWindow();
     GLFWwindow* window = glfwCreateWindow((int)screen_size.x, (int)screen_size.y, DEFAULT_WINDOW_TITLE, NULL, NULL);
-    char* errorMessage = "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n";
+    const char* errorMessage = "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n";
     int expectedResult = window != NULL;
     handleClosingError(expectedResult, errorMessage);
 	return window;

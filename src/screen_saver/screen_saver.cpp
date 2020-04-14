@@ -46,18 +46,10 @@ int main () {
     VboConfig colorsVbo(colors);
     vao.bind(1);
 
-    Reflection reflection (.5f, .6f);
+    Reflection reflection (.5f, .6f, .01f);
 	ourShader.use();
 	while (!glfwWindowShouldClose (glfw.getWindow())) {
-	
-        static double previousSeconds = glfwGetTime();
-        double currentSeconds = glfwGetTime();
-        double elapsedSeconds = currentSeconds - previousSeconds;
-        if(elapsedSeconds > 0) {
-            previousSeconds = currentSeconds;
-            matrix = reflection.calculateReflectedMatrix(matrix,elapsedSeconds);
-        }
-
+        matrix = reflection.calculateReflectedMatrix(matrix);
         ourShader.setMat4("matrix",matrix);
 	
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

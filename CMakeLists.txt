@@ -25,6 +25,7 @@ include_directories(
 	common
 	common/glad
 	common/KHR
+	common/mesh
 	.
 )
 set(ALL_LIBS
@@ -55,6 +56,7 @@ set(EXERCISE
 	hello_window
 	triangle
 	screen_saver
+	obj_load
 )
 
 foreach(EXERCISE ${EXERCISE})

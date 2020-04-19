@@ -6,25 +6,20 @@ using namespace std;
 #include <mesh/mtlReader.h>
 #include <mesh/streamReader.h>
 
-class ObjReader {
+class ObjReader : public FileReader<Mesh*>{
     public:
-        void setFilePath(string filePath){
-            this -> filePath = filePath;
+        ObjReader(string filePath) : FileReader(filePath){
+
         }
 
         Mesh* read(){
             this -> mesh = new Mesh;
             this -> currentGroup = new Group();
-            ifstream arq(this -> filePath);
-            while(!arq.eof()){
-                stringstream lineStream = getLineStream(&arq);
-                handleToken(&lineStream);
-            }
-            mesh -> insertGroup(currentGroup);
+            FileReader::processFile();
+            this -> mesh -> insertGroup(currentGroup);
             return mesh;
         }
     private: 
-        string filePath;
         Mesh* mesh;
         Group* currentGroup;
         vector<Material*>* materials;
@@ -34,13 +29,6 @@ class ObjReader {
         Vec2StreamReader vec2Reader;
         FaceStreamReader faceReader;
 
-        stringstream getLineStream(ifstream* fileStream){
-            string line;
-            getline(*fileStream, line);
-            stringstream lineStream;
-            lineStream << line;
-            return lineStream;
-        }
 
         void handleToken(stringstream* stream){
             string token = stringReader.read(stream);

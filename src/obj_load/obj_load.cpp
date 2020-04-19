@@ -42,8 +42,7 @@ int main () {
 
     Shader ourShader("shader.vs", "shader.fs");
     
-    ObjReader objReader;
-    objReader.setFilePath("al/al.obj");
+    ObjReader objReader("al/al.obj");
     objReader.read();
 
     VaoConfig vao;

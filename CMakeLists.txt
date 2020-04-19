@@ -52,8 +52,6 @@ add_definitions(
 )
 
 set(EXERCISE
-	hello_window
-	triangle
 	screen_saver
 )
 

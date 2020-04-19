@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <common/controls.hpp>
 
-#define DEFAULT_WINDOW_TITLE "LearnOpenGL"
+#define DEFAULT_WINDOW_TITLE "ScreenSaver"
 
 class GlfwConfig {
     public:
@@ -36,7 +36,7 @@ class GlfwConfig {
             // Ensure we can capture the escape key being pressed below
             glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
             // Dark blue background
-            glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+            glClearColor(0.8f, 0.8f, 0.8f, 0.0f);
             return 1;
         }
 

@@ -10,6 +10,8 @@
 #include <common/vboConfig.h>
 #include <common/reflection.h>
 
+#include <mesh/objReader.h>
+
 const glm::vec2 SCREEN_SIZE(800, 600);
 
 int main () {
@@ -40,6 +42,10 @@ int main () {
 
     Shader ourShader("shader.vs", "shader.fs");
     
+    ObjReader objReader;
+    objReader.setFilePath("al/al.obj");
+    objReader.read();
+
     VaoConfig vao;
     VboConfig pointsVbo(points);
     vao.bind(0);

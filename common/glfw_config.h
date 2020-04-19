@@ -1,3 +1,6 @@
+#ifndef GLFW_CONFIG_H
+#define GLFW_CONFIG_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -80,3 +83,4 @@ class GlfwConfig {
             this->window_title = window_title;
         }
 };
+#endif

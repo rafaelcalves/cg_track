@@ -1,3 +1,6 @@
+#ifndef GLAD_CONFIG_H
+#define GLAD_CONFIG_H
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <common/controls.hpp>
@@ -12,3 +15,4 @@ class GladConfig {
             return handleClosingError(result, errorMessage);
         }
 };
+#endif

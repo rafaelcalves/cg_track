@@ -1,3 +1,6 @@
+#ifndef GLEW_CONFIG_H
+#define GLEW_CONFIG_H
+
 #include <GL/glew.h>
 #include <common/controls.hpp>
 
@@ -11,3 +14,4 @@ class GlewConfig {
         return handleClosingError(expectedResult, errorMessage);
     }
 };
+#endif

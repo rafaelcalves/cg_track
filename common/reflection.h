@@ -1,3 +1,6 @@
+#ifndef REFLECTION_H
+#define REFLECTION_H
+
 #include <math.h>
 #include <glm/glm.hpp>
 #include <GL/glew.h>
@@ -47,3 +50,4 @@ class Reflection {
             return 2 * normal * (normal * - direction) + direction;
         }
 };
+#endif

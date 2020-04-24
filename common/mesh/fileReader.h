@@ -33,5 +33,10 @@ class FileReader {
         void setFilePath(string filePath){
             this -> filePath = filePath;
         } 
+
+        string getFileDirectory(){
+            size_t lastSlashPosition = this -> filePath.find_last_of("/\\");
+            return filePath.substr(0,lastSlashPosition);
+        }
 };
 #endif

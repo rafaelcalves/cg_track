@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <common/stb_image.h>
 #include <common/glew_config.h>
 #include <common/glfw_config.h>
 #include <common/shaders.h>
@@ -42,14 +43,15 @@ int main () {
 
     Shader ourShader("shader.vs", "shader.fs");
     
-    ObjReader objReader("al/al.obj");
-    objReader.read();
+    ObjReader objReader("cube/cube.obj");
+    Mesh* mesh = objReader.read();
+    mesh -> setup();
 
     VaoConfig vao;
-    VboConfig pointsVbo(points);
-    vao.bind(0);
-    VboConfig colorsVbo(colors);
-    vao.bind(1);
+    VboConfig pointsVbo(points, 9 * sizeof(GLfloat));
+    vao.bind(0, 3);
+    VboConfig colorsVbo(colors, 9 * sizeof(GLfloat));
+    vao.bind(1, 3);
 
     Reflection reflection (.5f, .6f, .01f);
 	ourShader.use();
@@ -59,7 +61,7 @@ int main () {
 	
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		glBindVertexArray (vao.getId());
+		glBindVertexArray (vao.id);
 		glDrawArrays (GL_TRIANGLES, 0, 3);
 
 		glfwPollEvents ();

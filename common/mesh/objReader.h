@@ -88,13 +88,8 @@ class ObjReader : public FileReader<Mesh*>{
             this -> currentGroup -> setMaterial(materialName, this -> materials);
         }
 
-        string getObjDirectory(){
-            size_t lastSlashPosition = this -> filePath.find_last_of("/\\");
-            return filePath.substr(0,lastSlashPosition);
-        }
-
         vector<Material*>* loadMaterialsFromPath(string* path){
-            string objDirectory = getObjDirectory();
+            string objDirectory = getFileDirectory();
             string mtlLibFullPath = objDirectory + "/" + *path;
             MtlReader mtlReader(mtlLibFullPath);
             return mtlReader.read();

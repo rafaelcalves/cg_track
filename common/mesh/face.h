@@ -19,6 +19,18 @@ class Face {
         void insertNormal(int normalIndex){
             this -> normals -> push_back(normalIndex);
         }
+
+        vector<int>* getVertices(){
+            return this -> vertices;
+        }
+
+        vector<int>* getTextures(){
+            return this -> textures;
+        }
+
+        vector<int>* getNormals(){
+            return this -> normals;
+        }
     private:
         vector<int>* vertices;
         vector<int>* textures;

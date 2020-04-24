@@ -1,19 +1,19 @@
 #include <GL/glew.h>
 class VaoConfig {
     public:
+        GLuint id;
         VaoConfig(){
             glGenVertexArrays(1, &id);
             glBindVertexArray(id);
         }
-
-        void bind(int attribute){
+        
+        void bind(int attribute, int size, GLsizei stride, void* pointer){
             glEnableVertexAttribArray(attribute);
-            glVertexAttribPointer(attribute, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+            glVertexAttribPointer(attribute, size, GL_FLOAT, GL_FALSE, stride ,pointer);
         }
 
-        int getId(){
-            return id;
+        void bind(int attribute, int size){
+            this -> bind(attribute, size, 0, NULL);
         }
     private:
-        GLuint id;
 };

@@ -32,6 +32,10 @@ class Group {
         int hasFaces(){
             return !this -> faces -> empty();
         }
+
+        vector<Face*>* getFaces(){
+            return this -> faces;
+        }
     private:
         string name;
         Material* material;

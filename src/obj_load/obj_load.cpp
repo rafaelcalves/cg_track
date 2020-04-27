@@ -3,7 +3,8 @@
 
 #include <stdio.h>
 #include <math.h>
-#include <common/stb_image.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
 #include <common/glew_config.h>
 #include <common/glfw_config.h>
 #include <common/shaders.h>
@@ -43,7 +44,7 @@ int main () {
 
     Shader ourShader("shader.vs", "shader.fs");
     
-    ObjReader objReader("cube/cube.obj");
+    ObjReader objReader("al/al.obj");
     Mesh* mesh = objReader.read();
     mesh -> setup();
 

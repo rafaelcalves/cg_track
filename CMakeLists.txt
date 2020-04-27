@@ -24,6 +24,7 @@ include_directories(
 	external/glew/include/
 	external/assimp/include/
 	common
+	common/stb
 	common/glad
 	common/KHR
 	common/mesh

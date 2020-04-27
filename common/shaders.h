@@ -133,6 +133,13 @@ public:
     {
         glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
+	GLint attribute(const GLchar* name) {
+		return glGetAttribLocation(ID, name);
+	}
+
+	GLint uniform(const GLchar * name) {
+		return glGetUniformLocation(ID, name);
+	}
 
 private:
     // utility function for checking shader compilation/linking errors.

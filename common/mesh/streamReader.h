@@ -57,7 +57,7 @@ class FaceStreamReader : public StreamReader<Face*>{
                 getline(columnStream, aux, '/');
                 int vertexIndex = stoi(aux);
                 face -> insertVertex(vertexIndex);
-
+                aux = "";
                 getline(columnStream, aux, '/');
                 if (!aux.empty()){
                     int textureIndex = stoi(aux);

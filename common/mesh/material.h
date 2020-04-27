@@ -35,13 +35,16 @@ class Material {
         string getName(){
             return this -> name;
         }
+        int getId(){
+            return this -> textureId;
+        }
     private:
         string name;
         glm::vec3 ambient;  //Ka
         glm::vec3 diffuse;  //Kd
         glm::vec3 specular; //Ks
         float exponent;     //Ns
-        string mapKdPath;      //map_Kd
+        string mapKdPath;   //map_Kd
         int textureId;      //tid
 
 

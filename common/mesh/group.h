@@ -36,6 +36,10 @@ class Group {
         vector<Face*>* getFaces(){
             return this -> faces;
         }
+
+        Material* getMaterial(){
+            return this -> material;
+        }
     private:
         string name;
         Material* material;

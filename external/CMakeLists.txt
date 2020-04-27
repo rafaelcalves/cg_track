@@ -57,7 +57,7 @@ target_link_libraries(GLEW_210
 
 ### ASSIMP ###
 # AssImp already has a CMakeLists.txt so let's use these
-
+set(CMAKE_MACOSX_RPATH 1)
 # Compile built-in, modified version of Zlib
 include(CheckIncludeFile)
 include(CheckTypeSize)

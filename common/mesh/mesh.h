@@ -31,14 +31,14 @@ class Mesh {
             this -> materialLibPath = materialLibPath;
         }
 
-        void push3DAttributeToVector(vector<GLfloat>* vec, int index){
-            vec -> push_back(this -> vertices -> at(index).x);
-            vec -> push_back(this -> vertices -> at(index).y);
-            vec -> push_back(this -> vertices -> at(index).z);
+        void push3DAttributeToVector(vector<GLfloat>* vec, int index, vector<glm::vec3>* vec3){
+            vec -> push_back(vec3 -> at(index).x);
+            vec -> push_back(vec3 -> at(index).y);
+            vec -> push_back(vec3 -> at(index).z);
         }
-        void push2DAttributeToVector(vector<GLfloat>* vec, int index){
-            vec -> push_back(this -> vertices -> at(index).x);
-            vec -> push_back(this -> vertices -> at(index).y);
+        void push2DAttributeToVector(vector<GLfloat>* vec, int index, vector<glm::vec2>* vec2){
+            vec -> push_back(vec2 -> at(index).x);
+            vec -> push_back(vec2 -> at(index).y);
         }
 
         void setup(){
@@ -47,55 +47,37 @@ class Mesh {
             this -> vbos = new vector<VboConfig*>();
 
             for (auto &group : *groups){
-                vector<GLfloat> vboVector;
+                vector<GLfloat>* vboVector = new vector<GLfloat>();
                 for (auto &face : *group -> getFaces()){
                     for (int i = 0; i < face -> getVertices() -> size(); i++) {
-                        int index = face->getVertices() -> at(i);
-                        push3DAttributeToVector(&vboVector,index);
+                        int index = face->getVertices() -> at(i) -1;
+                        push3DAttributeToVector(vboVector,index, this -> vertices);
                         
                         if(!face->getTextures() -> empty()){
-                            index = face->getTextures() -> at(i);
-                            push3DAttributeToVector(&vboVector,index);
+                            index = face->getTextures() -> at(i) -1;
+                            push2DAttributeToVector(vboVector,index, this -> mappings);
                         }
 
                         if(!face->getNormals() -> empty()){
-                            index = face->getNormals() -> at(i);
-                            push3DAttributeToVector(&vboVector,index);
+                            index = face->getNormals() -> at(i) -1;
+                            push3DAttributeToVector(vboVector,index, this -> normals);
                         }
                     }
                 }
-                vboVector = vboVector;
+                bindVbo(vboVector);
             }
         }
 
-
-        //     for (vector<Group*>::iterator group = groups->begin(); group != groups->end(); ++group) {
-		// 	vector<GLfloat> vboVector;
-		// 	for (vector<Face*>::iterator face = (*group)->faces->begin(); face != (*group)->faces->end(); ++face) {
-		// 		for (
-		// 			int vIndex = 0, tIndex = 0, nIndex = 0;
-		// 			vIndex < (*face)->vertices.size();
-		// 			vIndex++, tIndex++, nIndex++
-		// 			) {
-
-		// 			auto index = (*face)->vertices[vIndex];
-		// 			finalVector.push_back(vertices->at(index)->x);
-		// 			finalVector.push_back(vertices->at(index)->y);
-		// 			finalVector.push_back(vertices->at(index)->z);
-
-		// 			index = (*face)->textures[tIndex];
-		// 			finalVector.push_back(textures->at(index)->x);
-		// 			finalVector.push_back(textures->at(index)->y);
-
-		// 			index = (*face)->normals[nIndex];
-		// 			finalVector.push_back(normals->at(index)->x);
-		// 			finalVector.push_back(normals->at(index)->y);
-		// 			finalVector.push_back(normals->at(index)->z);
-		// 		}
-		// 	}
-		// 	(*group)->setup(finalVector, shader);
-		// }
-
+        void draw(Shader shader) {
+            for (vector<Group*>::iterator group = groups->begin(); group != groups->end(); ++group) {
+                Material* material = (*group)->getMaterial();
+                glBindVertexArray(this->vao.id);
+                glActiveTexture(GL_TEXTURE0 + material->getId());
+                shader.setInt("texture_diffuse1",material->getId());
+                glBindTexture(GL_TEXTURE_2D, material->getId());
+                glDrawArrays(GL_TRIANGLES, 0, (*group)->getFaces()->size() * 3);
+            }
+        }
         
     private:
         vector<glm::vec3>* vertices;
@@ -106,10 +88,12 @@ class Mesh {
         VaoConfig vao;
         vector<VboConfig*>* vbos;
 
-        void bindVbo(const void *data, GLsizeiptr totalSize, int dataSize){
-            VboConfig* vbo = new VboConfig(data, totalSize);
+        void bindVbo(vector<GLfloat>* vboVector){
+            VboConfig* vbo = new VboConfig(vboVector);
             this -> vbos -> push_back(vbo);
-            vao.bind(this -> vbos -> size(),dataSize);
+            this -> vao.bindGroup(0,3,0);
+            this -> vao.bindGroup(1,2,3);
+            this -> vao.bindGroup(2,3,5);
         }
 };
 #endif

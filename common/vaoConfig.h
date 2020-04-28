@@ -19,5 +19,9 @@ class VaoConfig {
         void bindGroup(int attribute, int size, int offset){
             this -> bind(attribute, size, 8 * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
         }
+
+        void bind(){
+            glBindVertexArray(id);
+        }
     private:
 };

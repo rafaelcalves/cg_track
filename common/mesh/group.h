@@ -23,8 +23,11 @@ class Group {
             for (auto &material : *materials){
                 if(material -> getName() == materialName){
                     this -> material = material;
+                    return;
                 }
             }
+            this -> material = NULL;
+            return;
         }
         void insertFace(Face* face){
             this -> faces -> push_back(face);
@@ -42,7 +45,7 @@ class Group {
         }
     private:
         string name;
-        Material* material;
+        Material* material = NULL;
         vector<Face*>* faces;
 };
 #endif

@@ -43,6 +43,7 @@ int main () {
     glew.init();
 
     Shader ourShader("shader.vs", "shader.fs");
+    Shader objShader("Shaders/Core/core.vert", "Shaders/Core/core.frag");
     
     ObjReader objReader("al/al.obj");
     Mesh* mesh = objReader.read();
@@ -62,8 +63,12 @@ int main () {
 	
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		glBindVertexArray (vao.id);
+		vao.bind();
 		glDrawArrays (GL_TRIANGLES, 0, 3);
+
+
+        objShader.use();
+        mesh -> draw(objShader);
 
 		glfwPollEvents ();
 		glfwSwapBuffers (glfw.getWindow());

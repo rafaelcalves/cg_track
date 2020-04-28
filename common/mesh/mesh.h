@@ -70,11 +70,13 @@ class Mesh {
 
         void draw(Shader shader) {
             for (vector<Group*>::iterator group = groups->begin(); group != groups->end(); ++group) {
+                vao.bind();
                 Material* material = (*group)->getMaterial();
-                glBindVertexArray(this->vao.id);
-                glActiveTexture(GL_TEXTURE0 + material->getId());
-                shader.setInt("texture_diffuse1",material->getId());
-                glBindTexture(GL_TEXTURE_2D, material->getId());
+                if(material){
+                    glActiveTexture(GL_TEXTURE0 + material->getId());
+                    shader.setInt("texture_diffuse1",material->getId());
+                    glBindTexture(GL_TEXTURE_2D, material->getId());
+                }
                 glDrawArrays(GL_TRIANGLES, 0, (*group)->getFaces()->size() * 3);
             }
         }

@@ -58,6 +58,8 @@ int main () {
     Reflection reflection (.5f, .6f, .01f);
 	ourShader.use();
 	while (!glfwWindowShouldClose (glfw.getWindow())) {
+
+	    ourShader.use();
         matrix = reflection.calculateReflectedMatrix(matrix);
         ourShader.setMat4("matrix",matrix);
 	

@@ -54,10 +54,7 @@ add_definitions(
 	-D_CRT_SECURE_NO_WARNINGS
 )
 
-set(EXERCISE
-	hello_window
-	triangle
-	screen_saver
+set(EXERCISE	
 	obj_load
 )
 

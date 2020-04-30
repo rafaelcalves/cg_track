@@ -62,7 +62,7 @@ int main () {
 	    ourShader.use();
         matrix = reflection.calculateReflectedMatrix(matrix);
         ourShader.setMat4("matrix",matrix);
-	
+        glEnable(GL_DEPTH_TEST);
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		vao.bind();

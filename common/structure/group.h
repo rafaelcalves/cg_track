@@ -4,8 +4,8 @@ using namespace std;
 
 #include <string>
 #include <vector>
-#include <mesh/face.h>
-#include <mesh/material.h>
+#include <structure/face.h>
+#include <structure/material.h>
 
 class Group {
     public:

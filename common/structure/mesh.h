@@ -4,8 +4,8 @@ using namespace std;
 
 #include <glm/glm.hpp>
 #include <vector>
-#include <mesh/group.h>
-#include <mesh/material.h>
+#include <structure/group.h>
+#include <structure/material.h>
 
 class Mesh {
     public:

@@ -12,7 +12,7 @@
 #include <common/vboConfig.h>
 #include <common/reflection.h>
 
-#include <mesh/objReader.h>
+#include <structure/objReader.h>
 
 const glm::vec2 SCREEN_SIZE(800, 600);
 

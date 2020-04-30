@@ -2,9 +2,9 @@
 #define MTLREADER_H
 using namespace std;
 
-#include <mesh/material.h>
-#include <mesh/streamReader.h>
-#include <mesh/fileReader.h>
+#include <structure/material.h>
+#include <structure/streamReader.h>
+#include <structure/fileReader.h>
 
 class MtlReader : public FileReader<vector<Material*>*>{
     public:

@@ -2,9 +2,9 @@
 #define OBJREADER_H
 using namespace std;
 
-#include <mesh/mesh.h>
-#include <mesh/mtlReader.h>
-#include <mesh/streamReader.h>
+#include <structure/mesh.h>
+#include <structure/mtlReader.h>
+#include <structure/streamReader.h>
 
 class ObjReader : public FileReader<Mesh*>{
     public:

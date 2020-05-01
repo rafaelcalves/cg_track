@@ -64,6 +64,10 @@ public:
 		return glm::lookAt(Position, Position + Front, Up);
 	}
 
+    glm::mat4 getProjectionMatrix(){
+        return glm::perspective(glm::radians(Zoom), (float) 800 / (float) 600, 0.1f, 100.0f);
+    }
+
 	void processKeyboard(Camera_Movement direction, float deltaTime) {
 		float velocity = MovementSpeed * deltaTime;
 		if (direction == FORWARD)

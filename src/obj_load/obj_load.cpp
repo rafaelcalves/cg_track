@@ -18,9 +18,9 @@
 #include <common/reflection.h>
 
 #include <structure/objReader.h>
-#include <structure/camera.h>
 #include <structure/group.h>
 #include <structure/material.h>
+#include <structure/Obj3D.h>
 
 #define OBJ_AL "resources/al/al.obj"
 
@@ -78,13 +78,8 @@ int main () {
 
     Shader ourShader("shader.vs", "shader.fs");
     Shader objShader("Shaders/Core/core.vert", "Shaders/Core/core.frag");
-    
-    
-    ObjReader objReader("al/al.obj");
-    Mesh* AL = objReader.read();
-    AL -> setup();
 
-      VaoConfig vao;
+    VaoConfig vao;
     // VboConfig pointsVbo(points, 9 * sizeof(GLfloat));
     // vao.bind(0, 3);
     // VboConfig colorsVbo(colors, 9 * sizeof(GLfloat));
@@ -117,39 +112,15 @@ int main () {
 		
 		//  vao.bind();
 		//  glDrawArrays (GL_TRIANGLES, 0, 3);
-
-        GLint modelLoc = objShader.uniform("model");
-		GLint viewLoc = objShader.uniform("view");
-		GLint projLoc = objShader.uniform("projection");
 		
         objShader.use();
 
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
- 		
-		for (std::vector<Mesh*>::iterator obj = meshVec->begin(); obj != meshVec->end(); ++obj) {
-			currentGroup = (*obj)->getGroups();
-		 		for (std::vector<Group*>::iterator group = currentGroup->begin(); group != currentGroup->end(); ++group) {
-					 vao.bind();
-				 	if ((*group)->hasFaces()) {
-						//glBindVertexArray((*group)->VAO());
-					 	vao.bind();
-					 	int textureLocation = objShader.uniform("texture_diffuse1");
-					 	glEnable(GL_TEXTURE_2D);
-					 	if ((*group)->hasMaterials()) {
-					 		Material *mat = (*group)->getMaterial();
-					 		if (mat->GetHasTexture()) {
-					 			int textureId = mat->getId();
-					 			glUniform1i(textureLocation, textureId);
-					 			glBindTexture(GL_TEXTURE_2D, textureId);
-					 		}
-					 	}
-					 	glDrawArrays(GL_TRIANGLES, 0, (*group)->getFaces()->size() * 3);
-					 	glDisable(GL_TEXTURE_2D);
-				 	}	
-				}
-		}
+		ObjReader objReader("al/al.obj");
+    	Mesh *AL = objReader.read();
+		//Adicionar escala e posição no Obj3D antes do push_back
+
+		meshVec -> push_back(AL);
+		AL -> draw(objShader);
 
 		glfwPollEvents ();
 		glfwSwapBuffers (glfw.getWindow());

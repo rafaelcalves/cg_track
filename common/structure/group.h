@@ -35,7 +35,13 @@ class Group {
         int hasFaces(){
             return !this -> faces -> empty();
         }
-
+        bool hasMaterials(){
+		    if (this->material != NULL)
+			    return true;
+		    else
+			    return false;
+        }
+        
         vector<Face*>* getFaces(){
             return this -> faces;
         }

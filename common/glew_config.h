@@ -1,7 +1,7 @@
 #ifndef GLEW_CONFIG_H
 #define GLEW_CONFIG_H
 
-#include <external/glew/include/GL/glew.h>
+#include <GL/glew.h>
 #include <common/controls.hpp>
 
 class GlewConfig {

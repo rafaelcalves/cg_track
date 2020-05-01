@@ -1,4 +1,4 @@
-#include <external/glew/include/GL/glew.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -19,6 +19,8 @@
 
 #include <structure/objReader.h>
 #include <structure/camera.h>
+#include <structure/group.h>
+#include <structure/material.h>
 
 #define OBJ_AL "resources/al/al.obj"
 
@@ -82,14 +84,17 @@ int main () {
     Mesh* AL = objReader.read();
     AL -> setup();
 
-    VaoConfig vao;
-    VboConfig pointsVbo(points, 9 * sizeof(GLfloat));
-    vao.bind(0, 3);
-    VboConfig colorsVbo(colors, 9 * sizeof(GLfloat));
-    vao.bind(1, 3);
+      VaoConfig vao;
+    // VboConfig pointsVbo(points, 9 * sizeof(GLfloat));
+    // vao.bind(0, 3);
+    // VboConfig colorsVbo(colors, 9 * sizeof(GLfloat));
+    // vao.bind(1, 3);
 
     Reflection reflection (.5f, .6f, .01f);
 	ourShader.use();
+
+	vector<Group*>* currentGroup = nullptr;
+	std::vector<Mesh*>* meshVec = new std::vector<Mesh*>();
 
     glm::mat4 projection(1);
 
@@ -110,20 +115,41 @@ int main () {
 		projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 		view = camera.getViewMatrix();
 		
-		vao.bind();
-		// glDrawArrays (GL_TRIANGLES, 0, 3);
+		//  vao.bind();
+		//  glDrawArrays (GL_TRIANGLES, 0, 3);
 
         GLint modelLoc = objShader.uniform("model");
 		GLint viewLoc = objShader.uniform("view");
 		GLint projLoc = objShader.uniform("projection");
-
+		
         objShader.use();
 
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-        AL -> draw(objShader);
+ 		
+		for (std::vector<Mesh*>::iterator obj = meshVec->begin(); obj != meshVec->end(); ++obj) {
+			currentGroup = (*obj)->getGroups();
+		 		for (std::vector<Group*>::iterator group = currentGroup->begin(); group != currentGroup->end(); ++group) {
+					 vao.bind();
+				 	if ((*group)->hasFaces()) {
+						//glBindVertexArray((*group)->VAO());
+					 	vao.bind();
+					 	int textureLocation = objShader.uniform("texture_diffuse1");
+					 	glEnable(GL_TEXTURE_2D);
+					 	if ((*group)->hasMaterials()) {
+					 		Material *mat = (*group)->getMaterial();
+					 		if (mat->GetHasTexture()) {
+					 			int textureId = mat->getId();
+					 			glUniform1i(textureLocation, textureId);
+					 			glBindTexture(GL_TEXTURE_2D, textureId);
+					 		}
+					 	}
+					 	glDrawArrays(GL_TRIANGLES, 0, (*group)->getFaces()->size() * 3);
+					 	glDisable(GL_TEXTURE_2D);
+				 	}	
+				}
+		}
 
 		glfwPollEvents ();
 		glfwSwapBuffers (glfw.getWindow());

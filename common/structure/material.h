@@ -8,13 +8,21 @@ class Material {
     public:
         Material(string name){
             this -> name = name;
+            hasTexture = false;
         }
+        Material() {}
+
         int hasName(){
             return !name.empty();
         }
         void setName(string name){
             this -> name = name;
         }
+
+        std::string GetName() { 
+            return this->name; 
+        }
+
         void setAmbient(glm::vec3 ambient){
             this -> ambient = ambient;
         }
@@ -29,6 +37,7 @@ class Material {
         }
         void setMapKdPath(string mapKdPath){
             this -> mapKdPath = mapKdPath;
+            this -> hasTexture = true;
         }
         void setId(int textureId){
             this -> textureId = textureId;
@@ -39,6 +48,13 @@ class Material {
         int getId(){
             return this -> textureId;
         }
+        bool GetHasTexture() {
+		    if (this->hasTexture)
+			    return true;
+		    else
+			    return false;
+	    }
+
     private:
         string name;
         glm::vec3 ambient;  //Ka
@@ -47,6 +63,7 @@ class Material {
         float exponent;     //Ns
         string mapKdPath;   //map_Kd
         int textureId;      //tid
+        bool hasTexture;
 
 
 };

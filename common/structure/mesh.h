@@ -2,7 +2,7 @@
 #define MESH_H
 using namespace std;
 
-#include <external/glew/include/GL/glew.h>
+#include <GL/glew.h>
 #include <vector>
 #include <structure/group.h>
 #include <structure/material.h>
@@ -29,6 +29,10 @@ class Mesh {
         }
         void setMaterialLib(string materialLibPath){
             this -> materialLibPath = materialLibPath;
+        }
+
+        vector<Group*>* getGroups(){
+            return this-> groups;
         }
 
         void push3DAttributeToVector(vector<GLfloat>* vec, int index, vector<glm::vec3>* vec3){

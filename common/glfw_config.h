@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 #include <common/controls.hpp>
 
-#define DEFAULT_WINDOW_TITLE "Screen Saver"
+#define DEFAULT_WINDOW_TITLE "Trabalho GA"
 
 class GlfwConfig {
     public:

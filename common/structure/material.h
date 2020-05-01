@@ -2,7 +2,8 @@
 #define MATERIAL_H
 using namespace std;
 
-#include <glm/glm.hpp>
+#include <external/glm/glm/glm.hpp>
+
 class Material {
     public:
         Material(string name){

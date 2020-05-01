@@ -4,7 +4,7 @@
 using namespace std;
 
 #include <vector>
-#include <GL/glew.h>
+#include <external/glew/include/GL/glew.h>
 class VboConfig {
     public:
         GLuint id;

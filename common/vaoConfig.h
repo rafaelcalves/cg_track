@@ -1,4 +1,4 @@
-#include <GL/glew.h>
+#include <external/glew/include/GL/glew.h>
 class VaoConfig {
     public:
         GLuint id;

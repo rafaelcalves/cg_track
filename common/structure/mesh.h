@@ -2,7 +2,7 @@
 #define MESH_H
 using namespace std;
 
-#include <glm/glm.hpp>
+#include <external/glew/include/GL/glew.h>
 #include <vector>
 #include <structure/group.h>
 #include <structure/material.h>
@@ -72,15 +72,19 @@ class Mesh {
             for (vector<Group*>::iterator group = groups->begin(); group != groups->end(); ++group) {
                 vao.bind();
                 Material* material = (*group)->getMaterial();
+                glEnable(GL_TEXTURE_2D);
                 if(material){
                     glActiveTexture(GL_TEXTURE0 + material->getId());
                     shader.setInt("texture_diffuse1",material->getId());
                     glBindTexture(GL_TEXTURE_2D, material->getId());
                 }
                 glDrawArrays(GL_TRIANGLES, 0, (*group)->getFaces()->size() * 3);
+                glDisable(GL_TEXTURE_2D);
             }
         }
-        
+
+
+
     private:
         vector<glm::vec3>* vertices;
         vector<glm::vec3>* normals;

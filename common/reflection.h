@@ -3,7 +3,7 @@
 
 #include <math.h>
 #include <glm/glm.hpp>
-#include <GL/glew.h>
+#include <external/glew/include/GL/glew.h>
 class Reflection {
     public:
         Reflection(GLfloat directionX, GLfloat directionY, GLfloat speed){

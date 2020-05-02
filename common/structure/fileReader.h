@@ -2,6 +2,11 @@
 #define FILEREADER_H
 using namespace std;
 
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+
 template <typename T>
 class FileReader {
     public: 

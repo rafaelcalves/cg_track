@@ -2,6 +2,15 @@
 #define STREAMREADER_H
 using namespace std;
 
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <structure/face.h>
+
+
 template <typename T>
 class StreamReader{
     public:

@@ -26,6 +26,7 @@
 #include <structure/material.h>
 #include <structure/Obj3D.h>
 
+
 #define OBJ_AL "al/al.obj"
 #define OBJ_CUBO "cube/cube.obj"
 
@@ -90,9 +91,9 @@ int main () {
     cubo -> model = *model;
     objects->push_back(cubo);
 
-    for (auto &object : *objects) {
-        object->setup();
-    }
+    // for (auto &object : *objects) {
+    //     object->setup();
+    // }
 
     ourShader.setFloat("ambientIntensity", 0.8f);
     ourShader.setFloat("lightIntensity", 0.8f);
@@ -103,11 +104,11 @@ int main () {
         lastFrame = currentFrame;
 
         glEnable(GL_DEPTH_TEST);
-        glClearColor(0.6f, 0.6f, 0.6f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         ourShader.setVec3("camera", camera.Position.x, camera.Position.y, camera.Position.z);
         for (auto &object : *objects) {
+            object->setup();
             glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
             glm::mat4 view = camera.getViewMatrix();
             ourShader.setMat4("projection", projection);
@@ -133,7 +134,6 @@ int main () {
 void onKeyPress() {
      if (glfwGetKey(glfw.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
      	glfwSetWindowShouldClose(glfw.getWindow(), true);
-
      if (glfwGetKey(glfw.getWindow(), GLFW_KEY_UP) == GLFW_PRESS)
      	camera.processKeyboard(FORWARD, deltaTime);
      if (glfwGetKey(glfw.getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS)

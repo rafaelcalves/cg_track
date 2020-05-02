@@ -86,7 +86,7 @@ int main () {
 
     model = new Model(0.0f, 0.33f, new glm::vec3(0.16f, 2.83f, -9.68f));
     ObjReader cubeReader(OBJ_CUBO);
-    Mesh* cubo = cubeReader.read();
+    Mesh* cubo = cubeReader.read(model);
     cubo -> model = *model;
     objects->push_back(cubo);
 

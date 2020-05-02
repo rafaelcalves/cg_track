@@ -19,6 +19,7 @@ class ObjReader : public FileReader<Mesh*>{
         }
 
         Mesh* read(){
+            this -> currentGroup = new Group();
             FileReader::processFile();
             this -> mesh -> insertGroup(currentGroup);
             return mesh;

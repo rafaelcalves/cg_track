@@ -29,9 +29,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
-void readCurvePoints(const GLchar* path);
-void scaleCurvePoints(std::vector<glm::vec3*>* points, float factor);
-float calculateAngle(int indexA, int indexB);
 
 int textureNum = 0;
 float scaleFactor = 45.0f;

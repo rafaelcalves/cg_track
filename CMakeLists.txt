@@ -78,5 +78,5 @@ foreach(EXERCISE ${EXERCISE})
 	)
 	# Xcode and Visual working directories
 	set_target_properties(${EXERCISE} PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")
-	file(COPY "src/${EXERCISE}/resources" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/build/bin/${EXERCISE}")
+	file(COPY "src/${EXERCISE}/resources" DESTINATION "${PROJECT_BINARY_DIR}/bin/${EXERCISE}")
 endforeach(EXERCISE)

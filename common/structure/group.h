@@ -9,19 +9,22 @@ using namespace std;
 
 class Group {
     public:
+        string* name;
+        Material* material = NULL;
+        vector<Face*>* faces;
+
         Group(){
             this -> faces = new vector<Face*>();
         }
+
         Group(string name){
             this -> faces = new vector<Face*>();
-            this -> name = name;
+            this -> name = &name;
         }
-        void setName(string name){
-            this -> name = name;
-        }
+
         void setMaterial(string materialName, vector<Material*>* materials) {
             for (auto &material : *materials){
-                if(material -> getName() == materialName){
+                if(*material -> name == materialName){
                     this -> material = material;
                     return;
                 }
@@ -29,29 +32,20 @@ class Group {
             this -> material = NULL;
             return;
         }
+
         void insertFace(Face* face){
             this -> faces -> push_back(face);
         }
+
         int hasFaces(){
             return !this -> faces -> empty();
         }
+
         bool hasMaterials(){
 		    if (this->material != NULL)
 			    return true;
 		    else
 			    return false;
         }
-        
-        vector<Face*>* getFaces(){
-            return this -> faces;
-        }
-
-        Material* getMaterial(){
-            return this -> material;
-        }
-    private:
-        string name;
-        Material* material = NULL;
-        vector<Face*>* faces;
 };
 #endif

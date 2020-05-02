@@ -117,6 +117,7 @@ int main () {
 		//Adicionar escala e posição no Obj3D antes do push_back
 
 		meshVec -> push_back(AL);
+		AL -> setup();
 		AL -> draw(objShader);
 
 		glfwPollEvents ();

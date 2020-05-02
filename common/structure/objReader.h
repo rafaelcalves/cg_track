@@ -79,7 +79,7 @@ class ObjReader : public FileReader<Mesh*>{
 
         void handleMtlLib(stringstream* stream){
             string materialLibPath = stringReader.read(stream);
-            this -> mesh -> setMaterialLib(materialLibPath);
+            this -> mesh -> materialLibPath = &materialLibPath;
             this -> materials = loadMaterialsFromPath(&materialLibPath);
         }
 

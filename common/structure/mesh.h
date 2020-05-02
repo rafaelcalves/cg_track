@@ -9,6 +9,14 @@ using namespace std;
 
 class Mesh {
     public:
+        vector<glm::vec3>* vertices;
+        vector<glm::vec3>* normals;
+        vector<glm::vec2>* mappings;
+        vector<Group*>* groups;
+        string* materialLibPath;
+        VaoConfig* vao;
+        vector<VboConfig*>* vbos;
+
         Mesh(){
             this -> vertices = new vector<glm::vec3>();
             this -> normals = new vector<glm::vec3>();
@@ -27,13 +35,6 @@ class Mesh {
         void insertGroup(Group* group){
             this -> groups -> push_back(group);
         }
-        void setMaterialLib(string materialLibPath){
-            this -> materialLibPath = materialLibPath;
-        }
-
-        vector<Group*>* getGroups(){
-            return this-> groups;
-        }
 
         void push3DAttributeToVector(vector<GLfloat>* vec, int index, vector<glm::vec3>* vec3){
             vec -> push_back(vec3 -> at(index).x);
@@ -47,12 +48,12 @@ class Mesh {
 
         void setup(){
             VaoConfig vao;
-            this -> vao = vao;
+            this -> vao = &vao;
             this -> vbos = new vector<VboConfig*>();
 
             for (auto &group : *groups){
                 vector<GLfloat>* vboVector = new vector<GLfloat>();
-                for (auto &face : *group -> getFaces()){
+                for (auto &face : *group -> faces){
                     for (int i = 0; i < face -> getVertices() -> size(); i++) {
                         int index = face->getVertices() -> at(i) -1;
                         push3DAttributeToVector(vboVector,index, this -> vertices);
@@ -74,15 +75,15 @@ class Mesh {
 
         void draw(Shader shader) {
             for (vector<Group*>::iterator group = groups->begin(); group != groups->end(); ++group) {
-                vao.bind();
-                Material* material = (*group)->getMaterial();
+                vao -> bind();
+                Material* material = (*group)-> material;
                 glEnable(GL_TEXTURE_2D);
                 if(material){
-                    glActiveTexture(GL_TEXTURE0 + material->getId());
-                    shader.setInt("texture_diffuse1",material->getId());
-                    glBindTexture(GL_TEXTURE_2D, material->getId());
+                    glActiveTexture(GL_TEXTURE0 + *material->textureId);
+                    shader.setInt("texture_diffuse1",*material->textureId);
+                    glBindTexture(GL_TEXTURE_2D, *material->textureId);
                 }
-                glDrawArrays(GL_TRIANGLES, 0, (*group)->getFaces()->size() * 3);
+                glDrawArrays(GL_TRIANGLES, 0, (*group)->faces->size() * 3);
                 glDisable(GL_TEXTURE_2D);
             }
         }
@@ -90,20 +91,13 @@ class Mesh {
 
 
     private:
-        vector<glm::vec3>* vertices;
-        vector<glm::vec3>* normals;
-        vector<glm::vec2>* mappings;
-        vector<Group*>* groups;
-        string materialLibPath;
-        VaoConfig vao;
-        vector<VboConfig*>* vbos;
 
         void bindVbo(vector<GLfloat>* vboVector){
             VboConfig* vbo = new VboConfig(vboVector);
             this -> vbos -> push_back(vbo);
-            this -> vao.bindGroup(0,3,0);
-            this -> vao.bindGroup(1,2,3);
-            this -> vao.bindGroup(2,3,5);
+            this -> vao -> bindGroup(0,3,0);
+            this -> vao -> bindGroup(1,2,3);
+            this -> vao -> bindGroup(2,3,5);
         }
 };
 #endif

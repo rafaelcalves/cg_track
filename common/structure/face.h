@@ -5,6 +5,9 @@ using namespace std;
 #include <vector>
 class Face {
     public:
+        vector<int>* vertices;
+        vector<int>* textures;
+        vector<int>* normals;
         Face(){
             this -> vertices = new vector<int>();
             this -> textures = new vector<int>();
@@ -32,8 +35,5 @@ class Face {
             return this -> normals;
         }
     private:
-        vector<int>* vertices;
-        vector<int>* textures;
-        vector<int>* normals;
 };
 #endif

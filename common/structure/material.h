@@ -6,65 +6,24 @@ using namespace std;
 
 class Material {
     public:
+        string* name;
+        glm::vec3* ambient;  //Ka
+        glm::vec3* diffuse;  //Kd
+        glm::vec3* specular; //Ks
+        float* exponent;     //Ns
+        string* mapKdPath;   //map_Kd
+        int* textureId;      //tid
+
         Material(string name){
-            this -> name = name;
-            hasTexture = false;
+            this -> name = &name;
         }
         Material() {}
 
-        int hasName(){
-            return !name.empty();
-        }
-        void setName(string name){
-            this -> name = name;
-        }
-
-        std::string GetName() { 
-            return this->name; 
-        }
-
-        void setAmbient(glm::vec3 ambient){
-            this -> ambient = ambient;
-        }
-        void setDiffuse(glm::vec3 diffuse){
-            this -> diffuse = diffuse;
-        }
-        void setSpecular(glm::vec3 specular){
-            this -> specular = specular;
-        }
-        void setExponent(float exponent){
-            this -> exponent =exponent;
-        }
-        void setMapKdPath(string mapKdPath){
-            this -> mapKdPath = mapKdPath;
-            this -> hasTexture = true;
-        }
-        void setId(int textureId){
-            this -> textureId = textureId;
-        }
-        string getName(){
-            return this -> name;
-        }
-        int getId(){
-            return this -> textureId;
-        }
-        bool GetHasTexture() {
-		    if (this->hasTexture)
-			    return true;
-		    else
-			    return false;
+        bool hasTexture() {
+            if (this->mapKdPath -> empty()){
+                return false;
+            }
+            return true;
 	    }
-
-    private:
-        string name;
-        glm::vec3 ambient;  //Ka
-        glm::vec3 diffuse;  //Kd
-        glm::vec3 specular; //Ks
-        float exponent;     //Ns
-        string mapKdPath;   //map_Kd
-        int textureId;      //tid
-        bool hasTexture;
-
-
 };
 #endif

@@ -28,6 +28,7 @@
 
 
 #define OBJ_AL "al/al.obj"
+#define OBJ_MESA "mesa/mesa.obj"
 #define OBJ_CUBO "cube/cube.obj"
 
 void onResize(GLFWwindow* window, int width, int height);

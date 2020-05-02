@@ -28,8 +28,8 @@
 
 
 #define OBJ_AL "al/al.obj"
-#define OBJ_MESA "mesa/mesa.obj"
-#define OBJ_CUBO "cube/cube.obj"
+#define OBJ_MESA "mesa/mesa01.obj"
+#define OBJ_CUBE "cube/cube.obj"
 
 void onResize(GLFWwindow* window, int width, int height);
 void onScroll(GLFWwindow* window, double xpos, double ypos);
@@ -73,7 +73,7 @@ int main () {
     Shader ourShader("shader.vs", "shader.fs");
 	ourShader.use();
 
-    Model* model = new Model(0.0f, 2.0f, new glm::vec3(0.0f, 0.0f, -10.0f));
+    Model* model = new Model(0.0f, 2.0f, new glm::vec3(2.0f, 0.0f, -6.0f));
     ObjReader alReader(OBJ_AL);
     Mesh* objal = alReader.read(model);
     objal -> model = *model;
@@ -87,7 +87,7 @@ int main () {
     createObject(model, objal);
 
     model = new Model(0.0f, 0.33f, new glm::vec3(0.16f, 2.83f, -9.68f));
-    ObjReader cubeReader(OBJ_CUBO);
+    ObjReader cubeReader(OBJ_CUBE);
     Mesh* cubo = cubeReader.read(model);
     cubo -> model = *model;
     objects->push_back(cubo);

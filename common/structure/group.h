@@ -40,7 +40,7 @@ class Group {
         }
 
         int hasFaces(){
-            return !this -> faces -> empty();
+            return this->faces != nullptr && !this -> faces -> empty();
         }
 
         bool hasMaterials(){

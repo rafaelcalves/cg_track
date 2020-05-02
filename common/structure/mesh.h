@@ -5,7 +5,7 @@ using namespace std;
 #include <GL/glew.h>
 #include <vector>
 #include <structure/group.h>
-#include <structure/material.h>
+#include <structure/model.h>
 
 class Mesh {
     public:
@@ -14,13 +14,24 @@ class Mesh {
         vector<glm::vec2>* mappings;
         vector<Group*>* groups;
         string* materialLibPath;
+        Model model;
 
         Mesh(){
-            this -> vertices = new vector<glm::vec3>();
-            this -> normals = new vector<glm::vec3>();
-            this -> mappings = new vector<glm::vec2>();
-            this -> groups = new vector<Group*>();
+            initAttributes();
         }
+
+        Mesh(Model* model) {
+            initAttributes();
+            this -> model = *model;
+        }
+
+        void copy(Mesh* origin) {
+            this->vertices = origin->vertices;
+            this->normals = origin->normals;
+            this->mappings = origin->mappings;
+            this->groups = origin->groups;
+        }
+
         void insertVertex(glm::vec3 vertex){
             this -> vertices -> push_back(vertex);
         }
@@ -85,6 +96,13 @@ class Mesh {
         }
 
     private:
+
+        void initAttributes(){
+            this -> vertices = new vector<glm::vec3>();
+            this -> normals = new vector<glm::vec3>();
+            this -> mappings = new vector<glm::vec2>();
+            this -> groups = new vector<Group*>();
+        }
 
         void bindVbo(vector<GLfloat>* vboVector, Group* group){
             VboConfig* vbo = new VboConfig(vboVector);

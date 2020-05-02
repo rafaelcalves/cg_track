@@ -4,12 +4,16 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <stdio.h>
-#include <math.h>
-#include <map>
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
 #include <vector>
+#include <map>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
+
 #include <common/glew_config.h>
 #include <common/glfw_config.h>
 #include <common/shaders.h>
@@ -22,13 +26,13 @@
 #include <structure/material.h>
 #include <structure/Obj3D.h>
 
-#define OBJ_AL "resources/al/al.obj"
+#define OBJ_AL "al/al.obj"
+#define OBJ_CUBO "cube/cube.obj"
 
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(GLFWwindow *window);
+void onResize(GLFWwindow* window, int width, int height);
+void onScroll(GLFWwindow* window, double xpos, double ypos);
+void onZoom(GLFWwindow* window, double xoffset, double yoffset);
+void onKeyPress();
 
 int textureNum = 0;
 float scaleFactor = 45.0f;
@@ -38,6 +42,9 @@ const unsigned int HEIGHT = 600;
 
 const glm::vec2 SCREEN_SIZE(WIDTH, HEIGHT);
 
+GlfwConfig glfw;
+GlewConfig glew;
+
 Camera camera(glm::vec3(0.0f, 7.0f, 10.0f));
 float lastX = WIDTH / 2.0f;
 float lastY = HEIGHT / 2.0f; 
@@ -46,136 +53,117 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
+float translation = -1.0f;
+
+vector<Mesh*>* objects = new vector<Mesh*>();
+int selectedObject = -1;
+
+void createObject(Model* modelData, Mesh *origin) {
+    Mesh* newMesh = new Mesh(modelData);
+    newMesh->copy(origin);
+    objects->push_back(newMesh);
+}
 
 int main () {
-    GLfloat points[]={
-         0.0f,  0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f
-    };
-	
-	GLfloat colors[]={
-        1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f
-	};
-
-	glm::mat4 matrix (
-        1.0f, 0.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 0.0f, 1.0f
-    );
-
-    GlfwConfig glfw;
     glfw.init(SCREEN_SIZE);
-
-    GlewConfig glew;
     glew.init();
 
     Shader ourShader("shader.vs", "shader.fs");
-    Shader objShader("Shaders/Core/core.vert", "Shaders/Core/core.frag");
-
-    VaoConfig vao;
-    // VboConfig pointsVbo(points, 9 * sizeof(GLfloat));
-    // vao.bind(0, 3);
-    // VboConfig colorsVbo(colors, 9 * sizeof(GLfloat));
-    // vao.bind(1, 3);
-
-    Reflection reflection (.5f, .6f, .01f);
 	ourShader.use();
 
-	vector<Group*>* currentGroup = nullptr;
-	std::vector<Mesh*>* meshVec = new std::vector<Mesh*>();
+    Model* model = new Model(0.0f, 2.0f, new glm::vec3(0.0f, 0.0f, -10.0f));
+    ObjReader alReader(OBJ_AL);
+    Mesh* objal = alReader.read(model);
+    objal -> model = *model;
+    objects->push_back(objal);
 
-    glm::mat4 projection(1);
+    model = new Model (0.0f, 0.5f, new glm::vec3(2.0f, 0.0f, -7.4f));
+    createObject(model, objal);
+    objects->push_back(objal);
 
-	while (!glfwWindowShouldClose (glfw.getWindow())) {
+    model = new Model( 0.0f, 0.5f, new glm::vec3(0.1f, 0.0f, -5.9f) );
+    createObject(model, objal);
 
-	    ourShader.use();
-        matrix = reflection.calculateReflectedMatrix(matrix);
-        ourShader.setMat4("matrix",matrix);
+    model = new Model(0.0f, 0.33f, new glm::vec3(0.16f, 2.83f, -9.68f));
+    ObjReader cubeReader(OBJ_CUBO);
+    Mesh* cubo = cubeReader.read();
+    cubo -> model = *model;
+    objects->push_back(cubo);
+
+    for (auto &object : *objects) {
+        object->setup();
+    }
+
+    ourShader.setFloat("ambientIntensity", 0.8f);
+    ourShader.setFloat("lightIntensity", 0.8f);
+
+    while (!glfwWindowShouldClose (glfw.getWindow())) {
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
         glEnable(GL_DEPTH_TEST);
+        glClearColor(0.6f, 0.6f, 0.6f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        ourShader.setVec3("camera", camera.Position.x, camera.Position.y, camera.Position.z);
+        for (auto &object : *objects) {
+            glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+            glm::mat4 view = camera.getViewMatrix();
+            ourShader.setMat4("projection", projection);
+            ourShader.setMat4("view", view);
 
-		glClearColor(0.6f, 0.6f, 0.6f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, *object->model.translate);
+            model = glm::rotate(model, glm::radians(*object -> model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+            model = glm::scale(model, glm::vec3(*object -> model.scale, *object -> model.scale, *object -> model.scale));
+            ourShader.setMat4("model", model);
+            ourShader.setFloat("colorPercentage",0.2f); //selectedObject == i ? 0.2f : 0.0f
 
-		glm::mat4 model(1);
-		glm::mat4 view(1);
+            object -> draw(ourShader);
+        }
 
-		projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-		view = camera.getViewMatrix();
-		
-		//  vao.bind();
-		//  glDrawArrays (GL_TRIANGLES, 0, 3);
-		
-        objShader.use();
-
-		ObjReader objReader("al/al.obj");
-    	Mesh *AL = objReader.read();
-		//Adicionar escala e posição no Obj3D antes do push_back
-
-		meshVec -> push_back(AL);
-		AL -> setup();
-		AL -> draw(objShader);
-
-		glfwPollEvents ();
+        glfwPollEvents();
 		glfwSwapBuffers (glfw.getWindow());
 	}	
 	glfwTerminate();
 	return 0;
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
+void onKeyPress() {
+     if (glfwGetKey(glfw.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+     	glfwSetWindowShouldClose(glfw.getWindow(), true);
 
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		camera.processKeyboard(FORWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		camera.processKeyboard(BACKWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		camera.processKeyboard(LEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		camera.processKeyboard(RIGHT, deltaTime);
+     if (glfwGetKey(glfw.getWindow(), GLFW_KEY_UP) == GLFW_PRESS)
+     	camera.processKeyboard(FORWARD, deltaTime);
+     if (glfwGetKey(glfw.getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
+     	camera.processKeyboard(BACKWARD, deltaTime);
+     if (glfwGetKey(glfw.getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
+     	camera.processKeyboard(LEFT, deltaTime);
+     if (glfwGetKey(glfw.getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
+     	camera.processKeyboard(RIGHT, deltaTime);
 }
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	// make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
+void onResize(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
 }
 
-// glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	if (firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
+void onScroll(GLFWwindow* window, double xPosition, double yPosition) {
+    if (firstMouse) {
+        lastX = xPosition;
+        lastY = yPosition;
+        firstMouse = false;
+    }
 
-	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+    float xOffset = xPosition - lastX;
+    float yOffset = lastY - yPosition;
 
-	lastX = xpos;
-	lastY = ypos;
+    lastX = xPosition;
+    lastY = yPosition;
 
-	camera.ProcessMouseMovement(xoffset, yoffset);
+    camera.ProcessMouseScroll(xOffset, yOffset);
 }
 
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	camera.ProcessMouseScroll(yoffset);
+void onZoom(GLFWwindow* window, double xoffset, double yoffset) {
+    camera.ProcessMouseZoom(yoffset);
 }

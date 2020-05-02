@@ -12,9 +12,13 @@ class ObjReader : public FileReader<Mesh*>{
 
         }
 
-        Mesh* read(){
-            this -> mesh = new Mesh;
+        Mesh* read(Model* model){
+            this -> mesh = new Mesh(model);
             this -> currentGroup = new Group();
+            return read();
+        }
+
+        Mesh* read(){
             FileReader::processFile();
             this -> mesh -> insertGroup(currentGroup);
             return mesh;

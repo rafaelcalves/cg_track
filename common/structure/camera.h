@@ -80,7 +80,7 @@ public:
 			Position += Right * velocity;
 	}
 
-	void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true)
+    void ProcessMouseScroll(float xoffset, float yoffset, bool constrainPitch = true)
 	{
 		xoffset *= MouseSensitivity;
 		yoffset *= MouseSensitivity;
@@ -102,7 +102,7 @@ public:
 	}
 
 
-void ProcessMouseScroll(float yoffset)
+    void ProcessMouseZoom (float yoffset)
 	{
 		if (Zoom >= 1.0f && Zoom <= 45.0f)
 			Zoom -= yoffset;

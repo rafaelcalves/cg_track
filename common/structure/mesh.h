@@ -14,8 +14,6 @@ class Mesh {
         vector<glm::vec2>* mappings;
         vector<Group*>* groups;
         string* materialLibPath;
-        VaoConfig* vao;
-        vector<VboConfig*>* vbos;
 
         Mesh(){
             this -> vertices = new vector<glm::vec3>();
@@ -47,10 +45,6 @@ class Mesh {
         }
 
         void setup(){
-            VaoConfig vao;
-            this -> vao = &vao;
-            this -> vbos = new vector<VboConfig*>();
-
             for (auto &group : *groups){
                 vector<GLfloat>* vboVector = new vector<GLfloat>();
                 for (auto &face : *group -> faces){
@@ -69,13 +63,15 @@ class Mesh {
                         }
                     }
                 }
-                bindVbo(vboVector);
+                VaoConfig* vao = new VaoConfig();
+                group -> vao = vao;
+                bindVbo(vboVector, group);
             }
         }
 
         void draw(Shader shader) {
             for (vector<Group*>::iterator group = groups->begin(); group != groups->end(); ++group) {
-                vao -> bind();
+                (*group) -> vao -> bind();
                 Material* material = (*group)-> material;
                 glEnable(GL_TEXTURE_2D);
                 if(material){
@@ -88,16 +84,14 @@ class Mesh {
             }
         }
 
-
-
     private:
 
-        void bindVbo(vector<GLfloat>* vboVector){
+        void bindVbo(vector<GLfloat>* vboVector, Group* group){
             VboConfig* vbo = new VboConfig(vboVector);
-            this -> vbos -> push_back(vbo);
-            this -> vao -> bindGroup(0,3,0);
-            this -> vao -> bindGroup(1,2,3);
-            this -> vao -> bindGroup(2,3,5);
+            group -> vao -> bindGroup(0,3,0);
+            group -> vao -> bindGroup(1,2,3);
+            group -> vao -> bindGroup(2,3,5);
+            group -> vbo = vbo;
         }
 };
 #endif

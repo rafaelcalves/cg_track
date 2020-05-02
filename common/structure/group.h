@@ -12,6 +12,8 @@ class Group {
         string* name;
         Material* material = NULL;
         vector<Face*>* faces;
+        VaoConfig* vao;
+        VboConfig* vbo;
 
         Group(){
             this -> faces = new vector<Face*>();

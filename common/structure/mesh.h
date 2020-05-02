@@ -70,16 +70,16 @@ class Mesh {
         }
 
         void draw(Shader shader) {
-            for (vector<Group*>::iterator group = groups->begin(); group != groups->end(); ++group) {
-                (*group) -> vao -> bind();
-                Material* material = (*group)-> material;
+            for (auto &group : *groups){
+                group -> vao -> bind();
+                Material* material = group-> material;
                 glEnable(GL_TEXTURE_2D);
                 if(material){
                     glActiveTexture(GL_TEXTURE0 + *material->textureId);
                     shader.setInt("texture_diffuse1",*material->textureId);
                     glBindTexture(GL_TEXTURE_2D, *material->textureId);
                 }
-                glDrawArrays(GL_TRIANGLES, 0, (*group)->faces->size() * 3);
+                glDrawArrays(GL_TRIANGLES, 0, group->faces->size() * 3);
                 glDisable(GL_TEXTURE_2D);
             }
         }

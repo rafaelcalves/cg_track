@@ -74,7 +74,7 @@ int main () {
     Shader ourShader("Shaders/model_loading.vs", "shader.fs");
 	ourShader.use();
 
-    glfwSetCursorPosCallback(glfw.getWindow(), onMouse);
+//    glfwSetCursorPosCallback(glfw.getWindow(), onMouse);
     glfwSetScrollCallback(glfw.getWindow(), onZoom);
 
     Model* model = new Model(0.0f, 0.66f, new glm::vec3(0.16f, 2.83f, -9.68f));
@@ -96,7 +96,11 @@ int main () {
 
         onKeyPress();
 
-        glEnable(GL_DEPTH_TEST);
+        glEnable( GL_BLEND );	// Enables blending ( glBlendFunc )
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        glEnable(GL_TEXTURE_2D);
+        glEnable( GL_DEPTH_TEST );
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         ourShader.setVec3("camera", camera.Position.x, camera.Position.y, camera.Position.z);

@@ -94,7 +94,7 @@ class Mesh {
                     shader.setInt("diffuse",*material->textureId);
                     glBindTexture(GL_TEXTURE_2D, *material->textureId);
                 }
-                glDrawArrays(GL_TRIANGLES, 0, group->faces->size() * 3);
+                glDrawArrays(GL_TRIANGLES, 0, group -> fullSize);
                 glDisable(GL_TEXTURE_2D);
             }
         }

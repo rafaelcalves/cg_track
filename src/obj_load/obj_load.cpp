@@ -26,8 +26,6 @@
 #include <structure/material.h>
 #include <structure/Obj3D.h>
 
-
-#define OBJ_AL "al/al.obj"
 #define OBJ_MESA "mesa/mesa01.obj"
 #define OBJ_CUBE "cube/cube.obj"
 
@@ -71,7 +69,7 @@ int main () {
     glfw.init(SCREEN_SIZE);
     glew.init();
 
-    Shader ourShader("Shaders/model_loading.vs", "shader.fs");
+    Shader ourShader("shaders/model_loading.vs", "shader.fs");
 	ourShader.use();
 
     glfwSetCursorPosCallback(glfw.getWindow(), onMouse);

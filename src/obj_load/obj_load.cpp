@@ -75,6 +75,8 @@ int main () {
 	ourShader.use();
 
     glfwSetCursorPosCallback(glfw.getWindow(), onMouse);
+    glfwSetScrollCallback(glfw.getWindow(), onZoom);
+
     Model* model = new Model(0.0f, 0.66f, new glm::vec3(0.16f, 2.83f, -9.68f));
     ObjReader cubeReader(OBJ_CUBE);
     Mesh* cubo = cubeReader.read(model);

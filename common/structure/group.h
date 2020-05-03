@@ -10,8 +10,9 @@ using namespace std;
 class Group {
     public:
         string* name;
-        Material* material = NULL;
+        Material* material;
         vector<Face*>* faces;
+        vector<GLfloat>* vboVector;
         VaoConfig* vao;
         VboConfig* vbo;
 

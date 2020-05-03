@@ -73,55 +73,18 @@ int main () {
     Shader ourShader("shader.vs", "shader.fs");
 	ourShader.use();
 
-    Model* model = new Model(0.0f, 2.0f, new glm::vec3(2.0f, 0.0f, -6.0f));
-    ObjReader alReader(OBJ_AL);
-    Mesh* objal = alReader.read(model);
-    objal -> model = *model;
-    objects->push_back(objal);
-
-    model = new Model (0.0f, 0.5f, new glm::vec3(2.0f, 0.0f, -7.4f));
-    createObject(model, objal);
-    objects->push_back(objal);
-
-    model = new Model( 0.0f, 0.5f, new glm::vec3(0.1f, 0.0f, -5.9f) );
-    createObject(model, objal);
-
-    model = new Model(0.0f, 0.33f, new glm::vec3(0.16f, 2.83f, -9.68f));
+    Model* model = new Model(0.0f, 0.33f, new glm::vec3(0.16f, 2.83f, -9.68f));
     ObjReader cubeReader(OBJ_CUBE);
     Mesh* cubo = cubeReader.read(model);
     cubo -> model = *model;
     objects->push_back(cubo);
 
-    // for (auto &object : *objects) {
-    //     object->setup();
-    // }
-
-    ourShader.setFloat("ambientIntensity", 0.8f);
-    ourShader.setFloat("lightIntensity", 0.8f);
-
     while (!glfwWindowShouldClose (glfw.getWindow())) {
-        float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
 
-        glEnable(GL_DEPTH_TEST);
+       // glEnable(GL_DEPTH_TEST);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        ourShader.setVec3("camera", camera.Position.x, camera.Position.y, camera.Position.z);
         for (auto &object : *objects) {
-            object->setup();
-            glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-            glm::mat4 view = camera.getViewMatrix();
-            ourShader.setMat4("projection", projection);
-            ourShader.setMat4("view", view);
-
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, *object->model.translate);
-            model = glm::rotate(model, glm::radians(*object -> model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-            model = glm::scale(model, glm::vec3(*object -> model.scale, *object -> model.scale, *object -> model.scale));
-            ourShader.setMat4("model", model);
-            ourShader.setFloat("colorPercentage",0.2f); //selectedObject == i ? 0.2f : 0.0f
-
+            object -> setup();
             object -> draw(ourShader);
         }
 

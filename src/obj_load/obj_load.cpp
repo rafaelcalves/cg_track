@@ -73,19 +73,6 @@ int main () {
     Shader ourShader("shader.vs", "shader.fs");
 	ourShader.use();
 
-    Model* model = new Model(0.0f, 2.0f, new glm::vec3(2.0f, 0.0f, -6.0f));
-    ObjReader alReader(OBJ_AL);
-    Mesh* objal = alReader.read(model);
-    objal -> model = *model;
-    objects->push_back(objal);
-
-    model = new Model (0.0f, 0.5f, new glm::vec3(2.0f, 0.0f, -7.4f));
-    createObject(model, objal);
-    objects->push_back(objal);
-
-    model = new Model( 0.0f, 0.5f, new glm::vec3(0.1f, 0.0f, -5.9f) );
-    createObject(model, objal);
-
     model = new Model(0.0f, 0.33f, new glm::vec3(0.16f, 2.83f, -9.68f));
     ObjReader cubeReader(OBJ_CUBE);
     Mesh* cubo = cubeReader.read(model);

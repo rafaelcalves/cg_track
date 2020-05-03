@@ -14,6 +14,9 @@ class VboConfig {
         VboConfig(vector<GLfloat> * data){
             setup(data, data -> size() * sizeof(GLfloat));
         }
+        VboConfig(GLfloat* data, int size){
+            setup(data,size * sizeof(GLfloat));
+        }
         VboConfig(vector<glm::vec3> * data){
             setup(data, data -> size() * sizeof(glm::vec3));
         }

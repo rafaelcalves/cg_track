@@ -16,7 +16,7 @@ class VaoConfig {
             this -> bind(attribute, size, 0, NULL);
         }
 
-        void bindGroup(int attribute, int size, int offset){
+        void bindGroup(int attribute, int size, int, int offset){
             this -> bind(attribute, size, 8 * sizeof(GLfloat), (GLvoid*)(offset * sizeof(GLfloat)));
         }
 

@@ -15,6 +15,7 @@ class Group {
         vector<GLfloat>* vboVector;
         VaoConfig* vao;
         VboConfig* vbo;
+        int fullSize = 0;
 
         Group(){
             this -> faces = new vector<Face*>();
@@ -38,6 +39,7 @@ class Group {
 
         void insertFace(Face* face){
             this -> faces -> push_back(face);
+            this -> fullSize +=face -> getVertices() -> size();
         }
 
         int hasFaces(){

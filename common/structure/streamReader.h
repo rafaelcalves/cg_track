@@ -56,27 +56,29 @@ class Vec2StreamReader : public StreamReader<glm::vec2>{
 class FaceStreamReader : public StreamReader<Face*>{
     public:
         Face* read(stringstream* stream){
-            string column;
             Face* face = new Face();
             while (hasInformationToRead(stream)){
+                string column;
                 *stream >> column;
                 stringstream columnStream;
                 columnStream << column;
-                string aux;
-                getline(columnStream, aux, '/');
-                int vertexIndex = stoi(aux);
-                face -> insertVertex(vertexIndex);
-                aux = "";
-                getline(columnStream, aux, '/');
-                if (!aux.empty()){
-                    int textureIndex = stoi(aux);
-                    face -> insertTexture(textureIndex);
-                }
-
-                if (hasInformationToRead(&columnStream)) {
+                if(!column.empty()) {
+                    string aux;
                     getline(columnStream, aux, '/');
-                    int normalIndex = stoi(aux);
-                    face -> insertNormal(normalIndex);
+                    int vertexIndex = stoi(aux);
+                    face->insertVertex(vertexIndex);
+                    aux = "";
+                    getline(columnStream, aux, '/');
+                    if (!aux.empty()) {
+                        int textureIndex = stoi(aux);
+                        face->insertTexture(textureIndex);
+                    }
+
+                    if (hasInformationToRead(&columnStream)) {
+                        getline(columnStream, aux, '/');
+                        int normalIndex = stoi(aux);
+                        face->insertNormal(normalIndex);
+                    }
                 }
             }
             return face;

@@ -86,9 +86,6 @@ int main () {
     model = new Model( 0.0f, 0.5f, new glm::vec3(0.1f, 0.0f, -5.9f) );
     createObject(model, cubo);
 
-    ourShader.setFloat("ambientIntensity", 0.8f);
-    ourShader.setFloat("lightIntensity", 0.8f);
-
     while (!glfwWindowShouldClose (glfw.getWindow())) {
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -103,7 +100,6 @@ int main () {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        ourShader.setVec3("camera", camera.Position.x, camera.Position.y, camera.Position.z);
         for (auto &object : *objects) {
             object->setup();
             glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
@@ -116,7 +112,6 @@ int main () {
             model = glm::rotate(model, glm::radians(*object -> model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
             model = glm::scale(model, glm::vec3(*object -> model.scale, *object -> model.scale, *object -> model.scale));
             ourShader.setMat4("model", model);
-            ourShader.setFloat("colorPercentage",0.2f); //selectedObject == i ? 0.2f : 0.0f
 
             object -> draw(ourShader);
         }

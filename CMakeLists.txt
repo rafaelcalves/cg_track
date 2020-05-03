@@ -56,8 +56,6 @@ add_definitions(
 
 set(EXERCISE	
 	obj_load
-	test_draw
-	screen_saver
 )
 
 foreach(EXERCISE ${EXERCISE})

@@ -103,7 +103,7 @@ int main () {
             model = glm::rotate(model, glm::radians(*object -> model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
             model = glm::scale(model, glm::vec3(*object -> model.scale, *object -> model.scale, *object -> model.scale));
             ourShader.setMat4("model", model);
-    //        ourShader.setFloat("colorPercentage",0.2f); //selectedObject == i ? 0.2f : 0.0f
+            ourShader.setFloat("colorPercentage",0.2f); //selectedObject == i ? 0.2f : 0.0f
 
             object -> draw(ourShader);
         }

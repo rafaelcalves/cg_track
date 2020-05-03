@@ -32,7 +32,7 @@
 #define OBJ_CUBE "cube/cube.obj"
 
 void onResize(GLFWwindow* window, int width, int height);
-void onScroll(GLFWwindow* window, double xpos, double ypos);
+void onMouse(GLFWwindow* window, double xpos, double ypos);
 void onZoom(GLFWwindow* window, double xoffset, double yoffset);
 void onKeyPress();
 
@@ -47,7 +47,8 @@ const glm::vec2 SCREEN_SIZE(WIDTH, HEIGHT);
 GlfwConfig glfw;
 GlewConfig glew;
 
-Camera camera(glm::vec3(0.0f, 7.0f, 10.0f));
+
+Camera camera(glm::vec3(1.0f, 7.0f, 10.0f));
 float lastX = WIDTH / 2.0f;
 float lastY = HEIGHT / 2.0f; 
 bool firstMouse = true;
@@ -73,7 +74,8 @@ int main () {
     Shader ourShader("Shaders/model_loading.vs", "shader.fs");
 	ourShader.use();
 
-    Model* model = new Model(0.0f, 0.33f, new glm::vec3(0.16f, 2.83f, -9.68f));
+    glfwSetCursorPosCallback(glfw.getWindow(), onMouse);
+    Model* model = new Model(0.0f, 0.66f, new glm::vec3(0.16f, 2.83f, -9.68f));
     ObjReader cubeReader(OBJ_CUBE);
     Mesh* cubo = cubeReader.read(model);
     cubo -> model = *model;
@@ -86,6 +88,8 @@ int main () {
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+
+        onKeyPress();
 
         glEnable(GL_DEPTH_TEST);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -132,7 +136,7 @@ void onResize(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-void onScroll(GLFWwindow* window, double xPosition, double yPosition) {
+void onMouse(GLFWwindow* window, double xPosition, double yPosition) {
     if (firstMouse) {
         lastX = xPosition;
         lastY = yPosition;

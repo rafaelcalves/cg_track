@@ -27,7 +27,7 @@ class Group {
 
         void setMaterial(string materialName, vector<Material*>* materials) {
             for (auto &material : *materials){
-                if(*material -> name == materialName){
+                if(material -> name == materialName){
                     this -> material = material;
                     return;
                 }

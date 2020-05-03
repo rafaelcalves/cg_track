@@ -6,7 +6,7 @@ using namespace std;
 
 class Material {
     public:
-        string* name;
+        string name;
         glm::vec3* ambient;  //Ka
         glm::vec3* diffuse;  //Kd
         glm::vec3* specular; //Ks
@@ -15,7 +15,7 @@ class Material {
         int* textureId;      //tid
 
         Material(string name){
-            this -> name = &name;
+            this -> name = name;
         }
         Material() {}
 

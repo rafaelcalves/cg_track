@@ -14,6 +14,8 @@ class MtlReader : public FileReader<vector<Material*>*>{
         vector<Material*>* read(){
             this -> materials = new vector<Material*>;
             FileReader::processFile();
+
+            this -> materials -> push_back(this -> currentMaterial);
             return materials;
         }
 

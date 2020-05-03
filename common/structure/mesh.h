@@ -113,7 +113,7 @@ class Mesh {
 
             group -> vao -> bind(0, 3, 8 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
             group -> vao -> bind(1, 2, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-            group -> vao -> bind(2, 3, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+            group -> vao -> bind(2, 3, 8 * sizeof(GLfloat), (GLvoid*)(5 * sizeof(GLfloat)));
             group -> vbo = vbo;
         }
 };

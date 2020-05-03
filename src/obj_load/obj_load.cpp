@@ -69,7 +69,7 @@ int main () {
     glfw.init(SCREEN_SIZE);
     glew.init();
 
-    Shader ourShader("shaders/model_loading.vs", "shader.fs");
+    Shader ourShader("shaders/model_loading.vs", "shaders/model_loading.fs");
 	ourShader.use();
 
 //    glfwSetCursorPosCallback(glfw.getWindow(), onMouse);

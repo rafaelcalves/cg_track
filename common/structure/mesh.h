@@ -91,7 +91,7 @@ class Mesh {
                 glEnable(GL_TEXTURE_2D);
                 if(material){
                     glActiveTexture(GL_TEXTURE0 + material->textureId);
-                    shader.setInt("diffuse", material->textureId);
+                    shader.setInt("textureId", material->textureId);
                     glBindTexture(GL_TEXTURE_2D, material->textureId);
                 }
                 glDrawArrays(GL_TRIANGLES, 0, group -> fullSize);

@@ -91,7 +91,6 @@ class MtlReader : public FileReader<vector<Material*>*>{
             unsigned char *data = stbi_load(fullPath.c_str(), &width, &height, &nrComponents, 0);
 
             if (data) {
-                glActiveTexture(GL_TEXTURE0 + textureID);
                 glBindTexture(GL_TEXTURE_2D, textureID);
 
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

@@ -90,9 +90,9 @@ class Mesh {
                 Material* material = group-> material;
                 glEnable(GL_TEXTURE_2D);
                 if(material){
-                    glActiveTexture(GL_TEXTURE0 + *material->textureId);
-                    shader.setInt("diffuse",*material->textureId);
-                    glBindTexture(GL_TEXTURE_2D, *material->textureId);
+                    glActiveTexture(GL_TEXTURE0 + material->textureId);
+                    shader.setInt("diffuse", material->textureId);
+                    glBindTexture(GL_TEXTURE_2D, material->textureId);
                 }
                 glDrawArrays(GL_TRIANGLES, 0, group -> fullSize);
                 glDisable(GL_TEXTURE_2D);

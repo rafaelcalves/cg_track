@@ -74,17 +74,17 @@ int main () {
     Shader ourShader("Shaders/model_loading.vs", "shader.fs");
 	ourShader.use();
 
-    glfwSetCursorPosCallback(glfw.getWindow(), onMouse);
+//    glfwSetCursorPosCallback(glfw.getWindow(), onMouse);
     glfwSetScrollCallback(glfw.getWindow(), onZoom);
 
     Model* model = new Model(0.0f, 0.66f, new glm::vec3(0.16f, 2.83f, -9.68f));
-    ObjReader cubeReader(OBJ_CUBE);
+    ObjReader cubeReader(OBJ_MESA);
     Mesh* cubo = cubeReader.read(model);
     cubo -> model = *model;
     objects->push_back(cubo);
-
-    model = new Model( 0.0f, 0.5f, new glm::vec3(0.1f, 0.0f, -5.9f) );
-    createObject(model, cubo);
+//
+//    model = new Model( 0.0f, 0.5f, new glm::vec3(0.1f, 0.0f, -5.9f) );
+//    createObject(model, cubo);
 
     while (!glfwWindowShouldClose (glfw.getWindow())) {
         float currentFrame = glfwGetTime();
@@ -93,10 +93,6 @@ int main () {
 
         onKeyPress();
 
-        glEnable( GL_BLEND );	// Enables blending ( glBlendFunc )
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-        glEnable(GL_TEXTURE_2D);
-        glEnable( GL_DEPTH_TEST );
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

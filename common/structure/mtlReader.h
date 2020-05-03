@@ -55,29 +55,29 @@ class MtlReader : public FileReader<vector<Material*>*>{
 
         void handleAmbient(stringstream* stream){
             glm::vec3 ambient = vec3Reader.read(stream);
-            this -> currentMaterial -> ambient = &ambient;
+            this -> currentMaterial -> ambient = ambient;
         }
 
         void handleDiffuse(stringstream* stream){
             glm::vec3 diffuse = vec3Reader.read(stream);
-            currentMaterial -> diffuse = &diffuse;
+            currentMaterial -> diffuse = diffuse;
         }
 
         void handleSpecular(stringstream* stream){
             glm::vec3 specular = vec3Reader.read(stream);
-            currentMaterial -> specular = &specular;
+            currentMaterial -> specular = specular;
         }
 
         void handleExponent(stringstream* stream){
             float exponent = floatReader.read(stream);
-            currentMaterial -> exponent = &exponent;
+            currentMaterial -> exponent = exponent;
         }
 
         void handleMapKdPath(stringstream* stream){
             string mapKdPath = stringReader.read(stream);
-            currentMaterial -> mapKdPath = &mapKdPath;
+            currentMaterial -> mapKdPath = mapKdPath;
             int textureId = loadTexturesFromFile(mapKdPath);
-            currentMaterial -> textureId = &textureId;
+            currentMaterial -> textureId = textureId;
         }
 
         unsigned int loadTexturesFromFile(string &fileName) {

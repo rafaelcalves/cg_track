@@ -7,12 +7,12 @@ using namespace std;
 class Material {
     public:
         string name;
-        glm::vec3* ambient;  //Ka
-        glm::vec3* diffuse;  //Kd
-        glm::vec3* specular; //Ks
-        float* exponent;     //Ns
-        string* mapKdPath;   //map_Kd
-        int* textureId;      //tid
+        glm::vec3 ambient;  //Ka
+        glm::vec3 diffuse;  //Kd
+        glm::vec3 specular; //Ks
+        float exponent;     //Ns
+        string mapKdPath;   //map_Kd
+        int textureId;      //tid
 
         Material(string name){
             this -> name = name;
@@ -20,7 +20,7 @@ class Material {
         Material() {}
 
         bool hasTexture() {
-            if (this->mapKdPath -> empty()){
+            if (mapKdPath.empty()){
                 return false;
             }
             return true;

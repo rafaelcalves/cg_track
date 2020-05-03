@@ -27,6 +27,7 @@
 #include <structure/Obj3D.h>
 
 #define OBJ_MESA "mesa/mesa01.obj"
+#define OBJ_PAINTBALL "paintball/cenaPaintball.obj"
 #define OBJ_CUBE "cube/cube.obj"
 
 void onResize(GLFWwindow* window, int width, int height);
@@ -74,15 +75,21 @@ int main () {
 
 //    glfwSetCursorPosCallback(glfw.getWindow(), onMouse);
     glfwSetScrollCallback(glfw.getWindow(), onZoom);
-
-    Model* model = new Model(0.0f, 0.66f, new glm::vec3(0.16f, 2.83f, -9.68f));
-    ObjReader cubeReader(OBJ_MESA);
-    Mesh* cubo = cubeReader.read(model);
-    cubo -> model = *model;
-    objects->push_back(cubo);
 //
-//    model = new Model( 0.0f, 0.5f, new glm::vec3(0.1f, 0.0f, -5.9f) );
-//    createObject(model, cubo);
+    Model* model = new Model(0.0f, 0.66f, new glm::vec3(2.16f, 3.16f, -7.68f));
+    ObjReader tableReader(OBJ_MESA);
+    Mesh* table = tableReader.read(model);
+    table -> model = *model;
+    objects->push_back(table);
+
+    model = new Model( 0.0f, 0.66f, new glm::vec3(7.16f, 3.16f, -7.68f) );
+    createObject(model, table);
+
+    Model* modelPaintball = new Model(0.0f, 0.9f, new glm::vec3(0.00f, 0.0f, -2.68f));
+    ObjReader paintballReader(OBJ_PAINTBALL);
+    Mesh* paintball = paintballReader.read(modelPaintball);
+    paintball -> model = *modelPaintball;
+    objects->push_back(paintball);
 
     while (!glfwWindowShouldClose (glfw.getWindow())) {
         float currentFrame = glfwGetTime();

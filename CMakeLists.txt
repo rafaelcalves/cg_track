@@ -56,6 +56,7 @@ add_definitions(
 
 set(EXERCISE	
 	obj_load
+	test_draw
 )
 
 foreach(EXERCISE ${EXERCISE})

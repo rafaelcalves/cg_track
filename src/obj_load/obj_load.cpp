@@ -70,18 +70,14 @@ int main () {
     glfw.init(SCREEN_SIZE);
     glew.init();
 
-    Shader ourShader("shader.vs", "shader.fs");
+    Shader ourShader("Shaders/model_loading.vs", "shader.fs");
 	ourShader.use();
 
-    model = new Model(0.0f, 0.33f, new glm::vec3(0.16f, 2.83f, -9.68f));
+    Model* model = new Model(0.0f, 0.33f, new glm::vec3(0.16f, 2.83f, -9.68f));
     ObjReader cubeReader(OBJ_CUBE);
     Mesh* cubo = cubeReader.read(model);
     cubo -> model = *model;
     objects->push_back(cubo);
-
-    // for (auto &object : *objects) {
-    //     object->setup();
-    // }
 
     ourShader.setFloat("ambientIntensity", 0.8f);
     ourShader.setFloat("lightIntensity", 0.8f);
@@ -107,7 +103,7 @@ int main () {
             model = glm::rotate(model, glm::radians(*object -> model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
             model = glm::scale(model, glm::vec3(*object -> model.scale, *object -> model.scale, *object -> model.scale));
             ourShader.setMat4("model", model);
-            ourShader.setFloat("colorPercentage",0.2f); //selectedObject == i ? 0.2f : 0.0f
+    //        ourShader.setFloat("colorPercentage",0.2f); //selectedObject == i ? 0.2f : 0.0f
 
             object -> draw(ourShader);
         }

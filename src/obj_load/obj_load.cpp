@@ -83,6 +83,9 @@ int main () {
     cubo -> model = *model;
     objects->push_back(cubo);
 
+    model = new Model( 0.0f, 0.5f, new glm::vec3(0.1f, 0.0f, -5.9f) );
+    createObject(model, cubo);
+
     ourShader.setFloat("ambientIntensity", 0.8f);
     ourShader.setFloat("lightIntensity", 0.8f);
 

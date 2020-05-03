@@ -10,7 +10,7 @@ using namespace std;
 class Group {
     public:
         string* name;
-        Material* material;
+        Material* material = nullptr;
         vector<Face*>* faces;
         vector<GLfloat>* vboVector;
         VaoConfig* vao;

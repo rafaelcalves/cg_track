@@ -63,10 +63,13 @@ class Mesh {
                         int index = face->getVertices() -> at(i) -1;
                         push3DAttributeToVector(vboVector,index, this -> vertices);
                         
-//                        if(!face->getTextures() -> empty()){
-//                            index = face->getTextures() -> at(i) -1;
-//                            push2DAttributeToVector(vboVector,index, this -> mappings);
-//                        }
+                        if(!face->getTextures() -> empty()){
+                            index = face->getTextures() -> at(i) -1;
+                            push2DAttributeToVector(vboVector,index, this -> mappings);
+                        } else {
+                            vboVector -> push_back(.0);
+                            vboVector -> push_back(.0);
+                        }
 
                         if(!face->getNormals() -> empty()){
                             index = face->getNormals() -> at(i) -1;
@@ -84,15 +87,15 @@ class Mesh {
         void draw(Shader shader) {
             for (auto &group : *groups){
                 group -> vao -> bind();
-//                Material* material = group-> material;
-//                glEnable(GL_TEXTURE_2D);
-//                if(material){
-//                    glActiveTexture(GL_TEXTURE0 + *material->textureId);
-//                    shader.setInt("texture_diffuse1",*material->textureId);
-//                    glBindTexture(GL_TEXTURE_2D, *material->textureId);
-//                }
+                Material* material = group-> material;
+                glEnable(GL_TEXTURE_2D);
+                if(material){
+                    glActiveTexture(GL_TEXTURE0 + *material->textureId);
+                    shader.setInt("diffuse",*material->textureId);
+                    glBindTexture(GL_TEXTURE_2D, *material->textureId);
+                }
                 glDrawArrays(GL_TRIANGLES, 0, group->faces->size() * 3);
-//                glDisable(GL_TEXTURE_2D);
+                glDisable(GL_TEXTURE_2D);
             }
         }
 
@@ -107,12 +110,10 @@ class Mesh {
 
         void bindVbo(vector<GLfloat>* vboVector, Group* group){
             VboConfig* vbo = new VboConfig(vboVector -> data(), vboVector -> size());
-            //group -> vao -> bindGroup(0,3,0);
-            //group -> vao -> bindGroup(1,2,3);
-           // group -> vao -> bindGroup(2,3,5);
 
-            group -> vao -> bind(0, 3, 6 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
-            group -> vao -> bind(1, 3, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+            group -> vao -> bind(0, 3, 8 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
+            group -> vao -> bind(1, 2, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+            group -> vao -> bind(2, 3, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
             group -> vbo = vbo;
         }
 };

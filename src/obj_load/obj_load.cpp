@@ -76,14 +76,14 @@ int main () {
 //    glfwSetCursorPosCallback(glfw.getWindow(), onMouse);
     glfwSetScrollCallback(glfw.getWindow(), onZoom);
 //
-    Model* model = new Model(0.0f, 0.66f, new glm::vec3(-10.16f, 3.16f, -2.68f));
+    Model* modelTable = new Model(0.0f, 0.66f, new glm::vec3(-10.16f, 3.16f, -2.68f));
     ObjReader tableReader(OBJ_MESA);
-    Mesh* table = tableReader.read(model);
-    table -> model = *model;
+    Mesh* table = tableReader.read(modelTable);
+    table -> model = *modelTable;
     objects->push_back(table);
 
-    model = new Model( 0.0f, 0.66f, new glm::vec3(10.16f, 3.16f, -2.68f) );
-    createObject(model, table);
+    modelTable = new Model( 0.0f, 0.66f, new glm::vec3(10.16f, 3.16f, -2.68f) );
+    createObject(modelTable, table);
 
     Model* modelPaintball = new Model(0.0f, 0.66f, new glm::vec3(0.00f, 0.0f, -2.68f));
     ObjReader paintballReader(OBJ_PAINTBALL);
@@ -91,7 +91,11 @@ int main () {
     paintball -> model = *modelPaintball;
     objects->push_back(paintball);
 
-    glViewport(0, 0, WIDTH, HEIGHT);
+    Model* modelCube = new Model(0.0f, 0.80f, new glm::vec3(-3.00f, 15.0f, 37.68f));
+    ObjReader cubeReader(OBJ_CUBE);
+    Mesh* cube = cubeReader.read(modelCube);
+    cube -> model = *modelCube;
+    objects->push_back(cube);
 
     while (!glfwWindowShouldClose (glfw.getWindow())) {
         float currentFrame = glfwGetTime();

@@ -73,9 +73,9 @@ int main () {
     Shader ourShader("shaders/model_loading.vs", "shaders/model_loading.fs");
 	ourShader.use();
 
-//    glfwSetCursorPosCallback(glfw.getWindow(), onMouse);
+    glfwSetCursorPosCallback(glfw.getWindow(), onMouse);
     glfwSetScrollCallback(glfw.getWindow(), onZoom);
-//
+
     Model* modelTable = new Model(0.0f, 0.66f, {-10.16f, .0f, -2.68f});
     ObjReader tableReader(OBJ_MESA);
     Mesh* table = tableReader.read(modelTable);

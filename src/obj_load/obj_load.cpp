@@ -24,7 +24,8 @@
 #include <structure/objReader.h>
 #include <structure/group.h>
 #include <structure/material.h>
-#include <structure/Obj3D.h>
+#include <structure/camera.h>
+
 
 #define OBJ_MESA "mesa/mesa01.obj"
 #define OBJ_PAINTBALL "paintball/cenaPaintball.obj"
@@ -34,6 +35,7 @@ void onResize(GLFWwindow* window, int width, int height);
 void onMouse(GLFWwindow* window, double xpos, double ypos);
 void onZoom(GLFWwindow* window, double xoffset, double yoffset);
 void onKeyPress();
+void configureShader(Shader ourShader, glm::mat4 model);
 
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 600;
@@ -104,17 +106,11 @@ int main () {
 
         for (auto &object : *objects) {
             object->setup();
-            glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-            glm::mat4 view = camera.getViewMatrix();
-            ourShader.setMat4("projection", projection);
-            ourShader.setMat4("view", view);
-
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, *object->model.translate);
             model = glm::rotate(model, glm::radians(*object -> model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
             model = glm::scale(model, glm::vec3(*object -> model.scale, *object -> model.scale, *object -> model.scale));
-            ourShader.setMat4("model", model);
-
+            configureShader(ourShader, model);
             object -> draw(ourShader);
         }
 
@@ -123,6 +119,14 @@ int main () {
 	}	
 	glfwTerminate();
 	return 0;
+}
+
+void configureShader(Shader ourShader, glm::mat4 model){
+    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+    glm::mat4 view = camera.getViewMatrix();
+    ourShader.setMat4("projection", projection);
+    ourShader.setMat4("view", view);
+    ourShader.setMat4("model", model);
 }
 
 void onKeyPress() {

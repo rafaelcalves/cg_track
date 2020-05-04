@@ -35,9 +35,6 @@ void onMouse(GLFWwindow* window, double xpos, double ypos);
 void onZoom(GLFWwindow* window, double xoffset, double yoffset);
 void onKeyPress();
 
-int textureNum = 0;
-float scaleFactor = 45.0f;
-
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 600;
 
@@ -55,7 +52,6 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
-float translation = -1.0f;
 
 vector<Mesh*>* objects = new vector<Mesh*>();
 int selectedObject = -1;

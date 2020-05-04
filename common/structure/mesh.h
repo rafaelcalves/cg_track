@@ -86,6 +86,9 @@ class Mesh {
 
         void draw(Shader shader) {
             for (auto &group : *groups){
+                glEnable(GL_BLEND);
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                glEnable(GL_DEPTH_TEST);
                 group -> vao -> bind();
                 Material* material = group-> material;
                 glEnable(GL_TEXTURE_2D);

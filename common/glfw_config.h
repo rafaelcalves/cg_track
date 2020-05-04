@@ -39,7 +39,7 @@ class GlfwConfig {
             // Ensure we can capture the escape key being pressed below
             glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
             // Gray background
-            glClearColor(.0f, .0f, .0f, 1.0f);
+            glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
             return 1;
         }
 

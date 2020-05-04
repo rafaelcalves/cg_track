@@ -25,11 +25,12 @@ class Model {
 
         void move(float elapsedTime){
             translate.x = calculateNextPosition(direction.x, translate.x);
-            translate.y = calculateNextPosition(direction.y, translate .y);
+            translate.y = calculateNextPosition(direction.y, translate.y);
+            translate.z = calculateNextPosition(direction.z, translate.z);
         }
 
         GLfloat calculateNextPosition(GLfloat direction, GLfloat lastPosition){
-            GLfloat result = .03f * sin(direction) + lastPosition;
+            GLfloat result = .9f * sin(direction) + lastPosition;
             return result;
         }
 };

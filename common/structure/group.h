@@ -39,7 +39,7 @@ class Group {
 
         void insertFace(Face* face){
             this -> faces -> push_back(face);
-            this -> fullSize +=face -> getVertices() -> size();
+            this -> fullSize += face -> getVertices() -> size();
         }
 
         int hasFaces(){

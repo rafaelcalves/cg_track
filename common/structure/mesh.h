@@ -6,6 +6,7 @@ using namespace std;
 #include <vector>
 #include <structure/group.h>
 #include <structure/model.h>
+#include <structure/boundingBox.h>
 
 class Mesh {
     public:
@@ -15,6 +16,7 @@ class Mesh {
         vector<Group*>* groups;
         string* materialLibPath;
         Model model;
+        BoundingBox* boundingBox;
 
         Mesh(){
             initAttributes();
@@ -30,11 +32,14 @@ class Mesh {
             this->normals = origin->normals;
             this->mappings = origin->mappings;
             this->groups = origin->groups;
+            this->boundingBox = origin->boundingBox;
         }
 
         void insertVertex(glm::vec3 vertex){
             this -> vertices -> push_back(vertex);
+            this -> boundingBox -> process(&vertex);
         }
+
         void insertMapping(glm::vec2 mapping){
             this -> mappings -> push_back(mapping);
         }
@@ -67,8 +72,8 @@ class Mesh {
                             index = face->getTextures() -> at(i) -1;
                             push2DAttributeToVector(vboVector,index, this -> mappings);
                         } else {
-                            vboVector -> push_back(.0);
-                            vboVector -> push_back(.0);
+                            vboVector -> push_back(.5);
+                            vboVector -> push_back(.5);
                         }
 
                         if(!face->getNormals() -> empty()){
@@ -109,6 +114,7 @@ class Mesh {
             this -> normals = new vector<glm::vec3>();
             this -> mappings = new vector<glm::vec2>();
             this -> groups = new vector<Group*>();
+            this -> boundingBox = new BoundingBox();
         }
 
         void bindVbo(vector<GLfloat>* vboVector, Group* group){

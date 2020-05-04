@@ -36,6 +36,7 @@ void onMouse(GLFWwindow* window, double xpos, double ypos);
 void onZoom(GLFWwindow* window, double xoffset, double yoffset);
 void onKeyPress();
 void configureShader(Shader ourShader, glm::mat4 model);
+void shot();
 
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 600;
@@ -56,6 +57,7 @@ float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
 vector<Mesh*>* objects = new vector<Mesh*>();
+vector<Mesh*>* shots = new vector<Mesh*>();
 int selectedObject = -1;
 
 void createObject(Model* modelData, Mesh *origin) {
@@ -74,26 +76,20 @@ int main () {
 //    glfwSetCursorPosCallback(glfw.getWindow(), onMouse);
     glfwSetScrollCallback(glfw.getWindow(), onZoom);
 //
-    Model* modelTable = new Model(0.0f, 0.66f, new glm::vec3(-10.16f, 3.16f, -2.68f));
+    Model* modelTable = new Model(0.0f, 0.66f, {-10.16f, 3.16f, -2.68f});
     ObjReader tableReader(OBJ_MESA);
     Mesh* table = tableReader.read(modelTable);
     table -> model = *modelTable;
     objects->push_back(table);
 
-    modelTable = new Model( 0.0f, 0.66f, new glm::vec3(10.16f, 3.16f, -2.68f) );
+    modelTable = new Model( 0.0f, 0.66f, {10.16f, 3.16f, -2.68f});
     createObject(modelTable, table);
 
-    Model* modelPaintball = new Model(0.0f, 0.66f, new glm::vec3(0.00f, 0.0f, -2.68f));
+    Model* modelPaintball = new Model(0.0f, 0.66f, {0.00f, 0.0f, -2.68f});
     ObjReader paintballReader(OBJ_PAINTBALL);
     Mesh* paintball = paintballReader.read(modelPaintball);
     paintball -> model = *modelPaintball;
     objects->push_back(paintball);
-
-    Model* modelCube = new Model(0.0f, 0.80f, new glm::vec3(-3.00f, 15.0f, 37.68f));
-    ObjReader cubeReader(OBJ_CUBE);
-    Mesh* cube = cubeReader.read(modelCube);
-    cube -> model = *modelCube;
-    objects->push_back(cube);
 
     while (!glfwWindowShouldClose (glfw.getWindow())) {
         float currentFrame = glfwGetTime();
@@ -107,11 +103,22 @@ int main () {
         for (auto &object : *objects) {
             object->setup();
             glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, *object->model.translate);
+            model = glm::translate(model, object->model.translate);
             model = glm::rotate(model, glm::radians(*object -> model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
             model = glm::scale(model, glm::vec3(*object -> model.scale, *object -> model.scale, *object -> model.scale));
             configureShader(ourShader, model);
             object -> draw(ourShader);
+        }
+
+        for (auto &shot : *shots) {
+            shot -> setup();
+            shot -> model.move(deltaTime);
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, shot->model.translate);
+            model = glm::rotate(model, glm::radians(*shot -> model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+            model = glm::scale(model, glm::vec3(*shot -> model.scale, *shot -> model.scale, *shot -> model.scale));
+            configureShader(ourShader, model);
+            shot -> draw(ourShader);
         }
 
         glfwPollEvents();
@@ -130,16 +137,26 @@ void configureShader(Shader ourShader, glm::mat4 model){
 }
 
 void onKeyPress() {
-     if (glfwGetKey(glfw.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
-     	glfwSetWindowShouldClose(glfw.getWindow(), true);
-     if (glfwGetKey(glfw.getWindow(), GLFW_KEY_UP) == GLFW_PRESS)
-     	camera.processKeyboard(FORWARD, deltaTime);
-     if (glfwGetKey(glfw.getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
-     	camera.processKeyboard(BACKWARD, deltaTime);
-     if (glfwGetKey(glfw.getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
-     	camera.processKeyboard(LEFT, deltaTime);
-     if (glfwGetKey(glfw.getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
-     	camera.processKeyboard(RIGHT, deltaTime);
+    if (glfwGetKey(glfw.getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(glfw.getWindow(), true);
+    if (glfwGetKey(glfw.getWindow(), GLFW_KEY_UP) == GLFW_PRESS)
+        camera.processKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(glfw.getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS)
+        camera.processKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(glfw.getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS)
+        camera.processKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(glfw.getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS)
+        camera.processKeyboard(RIGHT, deltaTime);
+    if (glfwGetKey(glfw.getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
+        shot();
+}
+
+void shot(){
+    Model* shotModel = new Model(0.0f, 0.80f, camera.Position, camera.Front);
+    ObjReader shotReader(OBJ_CUBE);
+    Mesh* shot = shotReader.read(shotModel);
+    shot -> model = *shotModel;
+    shots->push_back(shot);
 }
 
 void onResize(GLFWwindow* window, int width, int height) {

@@ -19,7 +19,6 @@
 #include <common/shaders.h>
 #include <common/vaoConfig.h>
 #include <common/vboConfig.h>
-#include <common/reflection.h>
 
 #include <structure/objReader.h>
 #include <structure/group.h>
@@ -63,6 +62,7 @@ int selectedObject = -1;
 void createObject(Model* modelData, Mesh *origin) {
     Mesh* newMesh = new Mesh(modelData);
     newMesh->copy(origin);
+    newMesh -> model.boundingBox = origin -> model.boundingBox;
     objects->push_back(newMesh);
 }
 
@@ -76,16 +76,18 @@ int main () {
 //    glfwSetCursorPosCallback(glfw.getWindow(), onMouse);
     glfwSetScrollCallback(glfw.getWindow(), onZoom);
 //
-    Model* modelTable = new Model(0.0f, 0.66f, {-10.16f, 3.16f, -2.68f});
+    Model* modelTable = new Model(0.0f, 0.66f, {-10.16f, .0f, -2.68f});
     ObjReader tableReader(OBJ_MESA);
     Mesh* table = tableReader.read(modelTable);
     table -> model = *modelTable;
     objects->push_back(table);
 
-    modelTable = new Model( 0.0f, 0.66f, {10.16f, 3.16f, -2.68f});
+    modelTable = new Model( 0.0f, 0.66f, {10.16f, .0f, -2.68f});
+    modelTable -> dynamic = true;
     createObject(modelTable, table);
 
     Model* modelPaintball = new Model(0.0f, 0.66f, {0.00f, 0.0f, -2.68f});
+    modelPaintball->scenario = true;
     ObjReader paintballReader(OBJ_PAINTBALL);
     Mesh* paintball = paintballReader.read(modelPaintball);
     paintball -> model = *modelPaintball;
@@ -101,24 +103,38 @@ int main () {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         for (auto &object : *objects) {
-            object->setup();
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, object->model.translate);
-            model = glm::rotate(model, glm::radians(*object -> model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-            model = glm::scale(model, glm::vec3(*object -> model.scale, *object -> model.scale, *object -> model.scale));
-            configureShader(ourShader, model);
-            object -> draw(ourShader);
+            if(object->model.visible) {
+                object->setup();
+                glm::mat4 model = glm::mat4(1.0f);
+                model = glm::translate(model, object->model.translate);
+                model = glm::rotate(model, glm::radians(*object->model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+                model = glm::scale(model, glm::vec3(*object->model.scale, *object->model.scale, *object->model.scale));
+                configureShader(ourShader, model);
+                object->draw(ourShader);
+            }
         }
 
         for (auto &shot : *shots) {
-            shot -> setup();
-            shot -> model.move(deltaTime);
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, shot->model.translate);
-            model = glm::rotate(model, glm::radians(*shot -> model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-            model = glm::scale(model, glm::vec3(*shot -> model.scale, *shot -> model.scale, *shot -> model.scale));
-            configureShader(ourShader, model);
-            shot -> draw(ourShader);
+            if(shot -> model.visible) {
+                shot->setup();
+                shot->model.move(deltaTime);
+                for (auto &object : *objects) {
+                    if (!object->model.scenario && shot->model.hasCollided(&object->model)){
+                        if (object->model.dynamic) {
+                            object->model.visible = false;
+                        } else {
+                            shot->model.reflect(&camera);
+                        }
+                        break;
+                    }
+                }
+                glm::mat4 model = glm::mat4(1.0f);
+                model = glm::translate(model, shot->model.translate);
+                model = glm::rotate(model, glm::radians(*shot->model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+                model = glm::scale(model, glm::vec3(*shot->model.scale, *shot->model.scale, *shot->model.scale));
+                configureShader(ourShader, model);
+                shot->draw(ourShader);
+            }
         }
 
         glfwPollEvents();

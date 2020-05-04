@@ -16,6 +16,18 @@ class BoundingBox {
             return;
         }
 
+        float getBorder(float scale){
+            float distance = getDistance(maxVertex, minVertex);
+            return (distance / 2) * scale;
+        }
+
+        float getDistance(glm::vec3* pointA, glm::vec3* pointB){
+            glm::vec3 distance = {maxVertex -> x - minVertex -> x,
+                                  maxVertex -> y - minVertex -> y,
+                                  maxVertex -> z - minVertex -> z};
+            return sqrt(pow(distance.x,2) + pow(distance.y,2) + pow(distance.z,2));
+        }
+
     private:
         void processMinVertex(glm::vec3* vertex) {
             processMin(&vertex -> x, &minVertex -> x);

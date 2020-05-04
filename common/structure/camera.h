@@ -1,7 +1,8 @@
 #include <external/glm/glm/glm.hpp>
 #include <external/glm/glm/gtc/matrix_transform.hpp>
 #include <vector>
-
+#ifndef CAMERA_H
+#define CAMERA_H
 enum Camera_Movement {
 	FORWARD,
 	BACKWARD,
@@ -124,3 +125,4 @@ private:
 		Up = glm::normalize(glm::cross(Right, Front));
 	}
 };
+#endif

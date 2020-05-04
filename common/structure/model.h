@@ -41,6 +41,14 @@ class Model {
                 visible = false;
         }
 
+        void handleCollision(Model* model, Camera* camera){
+            if (model -> dynamic) {
+                model -> visible = false;
+            } else {
+                this->reflect(camera);
+            }
+        }
+
         bool hasCollided(Model* model){
             float distance = getDistance(&model->translate, &this-> translate);
             float radiusSum = model->getBorder() + this -> getBorder();

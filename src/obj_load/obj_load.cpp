@@ -34,8 +34,11 @@ void onResize(GLFWwindow* window, int width, int height);
 void onMouse(GLFWwindow* window, double xpos, double ypos);
 void onZoom(GLFWwindow* window, double xoffset, double yoffset);
 void onKeyPress();
-void configureShader(Shader ourShader, glm::mat4 model);
+void configureShader(Shader* ourShader, glm::mat4* model);
 void shot();
+void drawObject(Shader *ourShader, Mesh *shot);
+bool handleCollision(Mesh *shot, Mesh *object);
+void duplicateObject(Model* modelData, Mesh *origin);
 
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 600;
@@ -44,7 +47,6 @@ const glm::vec2 SCREEN_SIZE(WIDTH, HEIGHT);
 
 GlfwConfig glfw;
 GlewConfig glew;
-
 
 Camera camera(glm::vec3(1.0f, 20.0f, 50.0f));
 float lastX = WIDTH / 2.0f;
@@ -58,13 +60,6 @@ float lastFrame = 0.0f;
 vector<Mesh*>* objects = new vector<Mesh*>();
 vector<Mesh*>* shots = new vector<Mesh*>();
 int selectedObject = -1;
-
-void createObject(Model* modelData, Mesh *origin) {
-    Mesh* newMesh = new Mesh(modelData);
-    newMesh->copy(origin);
-    newMesh -> model.boundingBox = origin -> model.boundingBox;
-    objects->push_back(newMesh);
-}
 
 int main () {
     glfw.init(SCREEN_SIZE);
@@ -84,7 +79,7 @@ int main () {
 
     modelTable = new Model( 0.0f, 0.66f, {10.16f, .0f, -2.68f});
     modelTable -> dynamic = true;
-    createObject(modelTable, table);
+    duplicateObject(modelTable, table);
 
     Model* modelPaintball = new Model(0.0f, 0.66f, {0.00f, 0.0f, -2.68f});
     modelPaintball->scenario = true;
@@ -104,39 +99,19 @@ int main () {
 
         for (auto &object : *objects) {
             if(object->model.visible) {
-                object->setup();
-                glm::mat4 model = glm::mat4(1.0f);
-                model = glm::translate(model, object->model.translate);
-                model = glm::rotate(model, glm::radians(*object->model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-                model = glm::scale(model, glm::vec3(*object->model.scale, *object->model.scale, *object->model.scale));
-                configureShader(ourShader, model);
-                object->draw(ourShader);
+                drawObject(&ourShader, object);
             }
         }
 
         for (auto &shot : *shots) {
             if(shot -> model.visible) {
-                shot->setup();
                 shot->model.move(deltaTime);
                 for (auto &object : *objects) {
-                    if (!object->model.scenario && shot->model.hasCollided(&object->model)){
-                        if (object->model.dynamic) {
-                            object->model.visible = false;
-                        } else {
-                            shot->model.reflect(&camera);
-                        }
-                        break;
-                    }
+                    if(shot -> handleCollision(object, &camera)) break;
                 }
-                glm::mat4 model = glm::mat4(1.0f);
-                model = glm::translate(model, shot->model.translate);
-                model = glm::rotate(model, glm::radians(*shot->model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-                model = glm::scale(model, glm::vec3(*shot->model.scale, *shot->model.scale, *shot->model.scale));
-                configureShader(ourShader, model);
-                shot->draw(ourShader);
+                drawObject(&ourShader, shot);
             }
         }
-
         glfwPollEvents();
 		glfwSwapBuffers (glfw.getWindow());
 	}	
@@ -144,12 +119,29 @@ int main () {
 	return 0;
 }
 
-void configureShader(Shader ourShader, glm::mat4 model){
+void duplicateObject(Model* modelData, Mesh *origin) {
+    Mesh* newMesh = new Mesh(modelData);
+    newMesh->copy(origin);
+    newMesh -> model.boundingBox = origin -> model.boundingBox;
+    objects->push_back(newMesh);
+}
+
+void drawObject(Shader *ourShader, Mesh *shot) {
+    shot->setup();
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, shot->model.translate);
+    model = glm::rotate(model, glm::radians(*shot->model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::scale(model, glm::vec3(*shot->model.scale, *shot->model.scale, *shot->model.scale));
+    configureShader(ourShader, &model);
+    shot->draw(ourShader);
+}
+
+void configureShader(Shader* ourShader, glm::mat4* model){
     glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
     glm::mat4 view = camera.getViewMatrix();
-    ourShader.setMat4("projection", projection);
-    ourShader.setMat4("view", view);
-    ourShader.setMat4("model", model);
+    ourShader->setMat4("projection", projection);
+    ourShader->setMat4("view", view);
+    ourShader->setMat4("model", *model);
 }
 
 void onKeyPress() {

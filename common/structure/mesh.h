@@ -86,7 +86,7 @@ class Mesh {
             }
         }
 
-        void draw(Shader shader) {
+        void draw(Shader* shader) {
             for (auto &group : *groups){
                 glEnable(GL_BLEND);
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -96,12 +96,20 @@ class Mesh {
                 glEnable(GL_TEXTURE_2D);
                 if(material){
                     glActiveTexture(GL_TEXTURE0 + material->textureId);
-                    shader.setInt("textureId", material->textureId);
+                    shader->setInt("textureId", material->textureId);
                     glBindTexture(GL_TEXTURE_2D, material->textureId);
                 }
                 glDrawArrays(GL_TRIANGLES, 0, group -> fullSize);
                 glDisable(GL_TEXTURE_2D);
             }
+        }
+
+        bool handleCollision(Mesh* object, Camera* camera) {
+            if (!object->model.scenario && this->model.hasCollided(&object->model)){
+                this->model.handleCollision(&object -> model, camera);
+                return true;
+            }
+            return false;
         }
 
     private:

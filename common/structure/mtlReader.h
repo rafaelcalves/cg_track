@@ -2,6 +2,7 @@
 #define MTLREADER_H
 using namespace std;
 
+#include <stb/stb_image.h>
 #include <structure/material.h>
 #include <structure/streamReader.h>
 #include <structure/fileReader.h>

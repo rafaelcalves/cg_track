@@ -28,6 +28,8 @@ public:
 	float MovementSpeed;
 	float MouseSensitivity;
 	float Zoom;
+    float lastX = 0;
+    float lastY = 0;
 
 	Camera(
 		glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),

@@ -2,28 +2,12 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
 #include <vector>
 #include <map>
 
 #define STB_IMAGE_IMPLEMENTATION
 
-//#include <common/glew_config.h>
-//#include <common/glfw_config.h>
-//#include <common/shaders.h>
-#include <common/vaoConfig.h>
-#include <common/vboConfig.h>
-#include <common/configuration.h>
-
-#include <structure/objReader.h>
-#include <structure/material.h>
-#include <structure/camera.h>
-//#include <structure/scene.h>
+#include <structure/cfgReader.h>
 
 #define OBJ_CUBE "cube/cube.obj"
 
@@ -42,11 +26,11 @@ float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
 vector<Mesh*>* shots = new vector<Mesh*>();
-Configuration configuration;
 Scene* scene;
 
 int main () {
-    scene = configuration.init("teste");
+    CfgReader config("resources/config/paintball.cfg");
+    scene = config.read();
 
     glfwSetCursorPosCallback(scene -> window, onMouse);
     glfwSetScrollCallback(scene -> window, onZoom);

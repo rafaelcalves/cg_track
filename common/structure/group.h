@@ -7,6 +7,9 @@ using namespace std;
 #include <structure/face.h>
 #include <structure/material.h>
 
+#include <common/vboConfig.h>
+#include <common/vaoConfig.h>
+
 class Group {
     public:
         string* name;

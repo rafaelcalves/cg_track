@@ -27,7 +27,7 @@ include_directories(
 	common/stb
 	common/glad
 	common/KHR
-	common/mesh
+	common/structure
 	.
 )
 set(ALL_LIBS
@@ -63,14 +63,8 @@ foreach(EXERCISE ${EXERCISE})
 	file(GLOB SOURCE
 		"src/${EXERCISE}/${EXERCISE}.cpp"
 	)
-	file(GLOB RESOURCES
-		"src/${EXERCISE}/resources/*.fs"
-		"src/${EXERCISE}/resources/*.vs"
-		"src/${EXERCISE}/resources/*.h"
-	)
 	add_executable(${EXERCISE} 
 		${SOURCE}
-		${RESOURCES}
 		${COMMON}
 	)
 	target_link_libraries(${EXERCISE}

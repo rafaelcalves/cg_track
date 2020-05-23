@@ -13,6 +13,7 @@ class ObjReader : public FileReader<Mesh*>{
         }
 
         Mesh* read(Model* model){
+            string path = __fs::filesystem::current_path();
             this -> mesh = new Mesh(model);
             this -> currentGroup = new Group();
             return read();
@@ -29,11 +30,9 @@ class ObjReader : public FileReader<Mesh*>{
         Group* currentGroup;
         vector<Material*>* materials;
 
-        StringStreamReader stringReader;
         Vec3StreamReader vec3Reader;
         Vec2StreamReader vec2Reader;
         FaceStreamReader faceReader;
-
 
         void handleToken(stringstream* stream){
             string token = stringReader.read(stream);

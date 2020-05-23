@@ -5,7 +5,9 @@
 #include <structure/camera.h>
 class Model {
     public:
-        Model() {}
+        Model() {
+            this -> boundingBox = new BoundingBox();
+        }
 
         Model(float rotation, float scale, glm::vec3 translate){
             this -> rotation = new float(rotation);

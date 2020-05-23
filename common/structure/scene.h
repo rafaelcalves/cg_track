@@ -1,7 +1,3 @@
-//
-// Created by Correa, Rafael on 19/05/20.
-//
-
 #ifndef CG_TRACK_SCENE_H
 #define CG_TRACK_SCENE_H
 using namespace std;
@@ -11,15 +7,24 @@ using namespace std;
 class Scene {
 public:
     Scene(){
-        shader = nullptr;
-        objects = nullptr;
-        camera = nullptr;
+        initAttributes();
     };
+    void initShader(string vertexPath, string fragmentPath){
+        shader = new Shader(vertexPath.c_str(), fragmentPath.c_str());
+        shader -> use();
+    }
+
     Shader* shader;
     vector<Mesh*>* objects;
     Camera* camera;
     GLFWwindow* window;
     glm::vec2* screenSize;
+private:
+    void initAttributes(){
+        shader = nullptr;
+        objects = new vector<Mesh*>();
+        camera = nullptr;
+    }
 };
 
 

@@ -14,6 +14,7 @@ class MtlReader : public FileReader<vector<Material*>*>{
         }
         vector<Material*>* read(){
             this -> materials = new vector<Material*>;
+            this -> currentMaterial = nullptr;
             FileReader::processFile();
 
             this -> materials -> push_back(this -> currentMaterial);
@@ -22,9 +23,8 @@ class MtlReader : public FileReader<vector<Material*>*>{
 
     private:
         vector<Material*>* materials;
-        Material* currentMaterial = NULL;
+        Material* currentMaterial;
 
-        StringStreamReader stringReader;
         Vec3StreamReader vec3Reader;
         FloatStreamReader floatReader;
 

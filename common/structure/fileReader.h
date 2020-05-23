@@ -11,6 +11,7 @@ template <typename T>
 class FileReader {
     public: 
         string filePath;
+        StringStreamReader stringReader;
         virtual T read() = 0;
 
         FileReader(string filePath){

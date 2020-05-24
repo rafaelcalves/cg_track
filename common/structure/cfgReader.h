@@ -42,63 +42,99 @@ private:
         string token = stringReader.read(stream);
 
         if (token == "screen") {
-            glm::vec2 screenSize = vec2Reader.read(stream);
-            scene->screenSize = new glm::vec2(screenSize);
-            initOpenGL();
+            handleScreen(stream);
         } else if (token == "camera") {
-            glm::vec3 cameraValues = vec3Reader.read(stream);
-            scene->camera = new Camera(cameraValues);
+            handleCamera(stream);
         } else if (token == "vs") {
-            vertexShaderPath = stringReader.read(stream);
-            if (fragmentShaderPath != "")
-                scene->initShader(vertexShaderPath, fragmentShaderPath);
+            handleVertexShader(stream);
         } else if (token == "fs") {
-            fragmentShaderPath = stringReader.read(stream);
-            if (vertexShaderPath != "")
-                scene->initShader(vertexShaderPath, fragmentShaderPath);
+            handleFragmentShader(stream);
         } else if (token == "reader") {
-            string filePath = stringReader.read(stream);
-            readers -> push_back(new ObjReader(filePath));
+            handleReader(stream);
         } else if (token == "model") {
-            if(currentModel){
-                scene -> objects -> push_back(readers -> at(readerIndex) -> read(currentModel));
-                currentModel = new Model();
-            }
-            currentModel = new Model();
+            handleModel();
         } else if (token == "rotation") {
-            GLfloat* rotation = new GLfloat(floatReader.read(stream));
-            currentModel -> rotation = rotation;
+            handleRotation(stream);
         } else if (token == "scale") {
-            GLfloat* scale = new GLfloat(floatReader.read(stream));
-            currentModel -> scale = scale;
+            handleScale(stream);
         } else if (token == "translate") {
-            glm::vec3 translate = vec3Reader.read(stream);
-            currentModel -> translate = translate;
+            handleTranslate(stream);
         } else if (token == "dynamic") {
-            currentModel -> dynamic = true;
+            handleDynamic();
         } else if (token == "scenario") {
-            currentModel -> scenario = true;
+            handleScenario();
         } else if (token == "readerIndex") {
-            int index = (int)(floatReader.read(stream));
-            readerIndex = index;
+            handleReaderIndex(stream);
         }
     }
 
-    void initOpenGL() const {
+    void handleDynamic() { currentModel-> dynamic = true; }
+
+    void handleScenario() { currentModel-> scenario = true; }
+
+    void handleReaderIndex(stringstream *stream) {
+        int index = (int)(floatReader.read(stream));
+        readerIndex = index;
+    }
+
+    void handleTranslate(stringstream *stream) {
+        glm::vec3 translate = vec3Reader.read(stream);
+        currentModel-> translate = translate;
+    }
+
+    void handleScale(stringstream *stream) {
+        GLfloat* scale = new GLfloat(floatReader.read(stream));
+        currentModel-> scale = scale;
+    }
+
+    void handleRotation(stringstream *stream) {
+        GLfloat* rotation = new GLfloat(floatReader.read(stream));
+        currentModel-> rotation = rotation;
+    }
+
+    void handleModel() {
+        if(currentModel){
+            scene-> objects -> push_back(readers-> at(readerIndex) -> read(currentModel));
+            currentModel = new Model();
+        }
+        currentModel = new Model();
+    }
+
+    void handleReader(stringstream *stream) {
+        string filePath = stringReader.read(stream);
+        readers-> push_back(new ObjReader(filePath));
+    }
+
+    void handleFragmentShader(stringstream *stream) {
+        fragmentShaderPath = stringReader.read(stream);
+        if (vertexShaderPath != "")
+            scene->initShader(vertexShaderPath, fragmentShaderPath);
+    }
+
+    void handleVertexShader(stringstream *stream) {
+        vertexShaderPath = stringReader.read(stream);
+        if (fragmentShaderPath != "")
+            scene->initShader(vertexShaderPath, fragmentShaderPath);
+    }
+
+    void handleCamera(stringstream *stream) {
+        glm::vec3 cameraValues = vec3Reader.read(stream);
+        scene->camera = new Camera(cameraValues);
+    }
+
+    void handleScreen(stringstream *stream) {
+        glm::vec2 screenSize = vec2Reader.read(stream);
+        scene->screenSize = new glm::vec2(screenSize);
+        initOpenGL();
+    }
+
+    void initOpenGL() {
         GlfwConfig glfw;
         glfw.init(*scene-> screenSize);
         scene-> window = glfw.getWindow();
         GlewConfig glew;
         glew.init();
     }
-
-    Mesh* duplicateObject(Model* modelData, Mesh *origin) {
-        Mesh* newMesh = new Mesh(modelData);
-        newMesh->copy(origin);
-        newMesh -> model.boundingBox = origin -> model.boundingBox;
-        return newMesh;
-    }
-
 };
 
 

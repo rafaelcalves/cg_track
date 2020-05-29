@@ -54,7 +54,7 @@ int main () {
             if(shot -> model.visible) {
                 shot->model.move(deltaTime);
                 for (auto &object : *scene -> objects) {
-                    if(shot -> handleCollision(object, scene -> camera)) break;
+                    if(shot -> handleCollision(object)) break;
                 }
                 drawObject(shot);
             }

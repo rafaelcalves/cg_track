@@ -104,9 +104,9 @@ class Mesh {
             }
         }
 
-        bool handleCollision(Mesh* object, Camera* camera) {
+        bool handleCollision(Mesh* object) {
             if (!object->model.scenario && this->model.hasCollided(&object->model)){
-                this->model.handleCollision(&object -> model, camera);
+                this->model.handleCollision(&object -> model);
                 return true;
             }
             return false;

@@ -43,11 +43,11 @@ class Model {
                 visible = false;
         }
 
-        void handleCollision(Model* model, Camera* camera){
+        void handleCollision(Model* model){
             if (model -> dynamic) {
                 model -> visible = false;
             } else {
-                this->reflect(camera);
+                this->reflect(model);
             }
         }
 
@@ -57,8 +57,14 @@ class Model {
             return (distance < radiusSum);
         }
 
-        void reflect(Camera* camera){
-            this -> direction = glm::cross(this -> direction, glm::normalize(glm::cross(camera->Right, camera->Front)));
+        glm::vec3 getOrigin(){
+            return this->translate + this->boundingBox->getOrigin();
+        }
+
+        void reflect(Model* model){
+            glm::vec3 origin = model->getOrigin();
+            glm::vec3 normal = glm::normalize(this -> translate - origin);
+            this -> direction = glm::reflect(this -> direction, normal);
         }
 
         float getBorder() {

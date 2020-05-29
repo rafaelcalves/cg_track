@@ -1,4 +1,4 @@
-    #ifndef BOUNDINGBOX_H
+#ifndef BOUNDINGBOX_H
 #define BOUNDINGBOX_H
 class BoundingBox {
     public:
@@ -15,6 +15,14 @@ class BoundingBox {
             maxVertex = new glm::vec3 (*vertex);
             return;
         }
+
+        glm::vec3 getOrigin(){
+            float originX =  (maxVertex -> x + minVertex -> x)/2;
+            float originY =  (maxVertex -> y + minVertex -> y)/2;
+            float originZ =  (maxVertex -> z + minVertex -> z)/2;
+            glm::vec3 origin(originX,originY,originZ);
+            return origin;
+        };
 
         float getBorder(float scale){
             float distance = getDistance(maxVertex, minVertex);

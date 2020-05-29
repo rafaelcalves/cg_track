@@ -8,6 +8,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <structure/cfgReader.h>
+#include <zconf.h>
 
 #define OBJ_CUBE "cube/cube.obj"
 
@@ -105,6 +106,7 @@ void shot(){
     Mesh* shot = shotReader.read(shotModel);
     shot -> model = *shotModel;
     shots->push_back(shot);
+    usleep(200000);
 }
 
 void onResize(GLFWwindow* window, int width, int height) {

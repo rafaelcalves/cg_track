@@ -27,6 +27,7 @@ class MtlReader : public FileReader<vector<Material*>*>{
 
         Vec3StreamReader vec3Reader;
         FloatStreamReader floatReader;
+        IntStreamReader intReader;
 
         void handleToken(stringstream* stream){
             string token = stringReader.read(stream);
@@ -41,9 +42,30 @@ class MtlReader : public FileReader<vector<Material*>*>{
                 handleSpecular(stream);
             } else if (token == "Ns") {
                 handleExponent(stream);
+            } else if (token == "Ni") {
+                handleOpticalDensity(stream);
+            } else if (token == "illum") {
+                handleIllumination(stream);
+            } else if (token == "Tf") {
+                handleTransmissionFilter(stream);
             } else if (token == "map_Kd") {
                 handleMapKdPath(stream);
             }
+        }
+
+        void handleIllumination(stringstream* stream){
+            int illumination = intReader.read(stream);
+            this -> currentMaterial -> illumination = illumination;
+        }
+
+        void handleOpticalDensity(stringstream* stream){
+            float opticalDensity = floatReader.read(stream);
+            currentMaterial -> opticalDensity = opticalDensity;
+        }
+
+        void handleTransmissionFilter(stringstream* stream){
+            glm::vec3 tf = vec3Reader.read(stream);
+            this -> currentMaterial -> transmissionFilter = tf;
         }
 
         void handleNewMtl(stringstream* stream){

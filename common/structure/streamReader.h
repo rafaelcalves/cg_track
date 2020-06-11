@@ -26,6 +26,15 @@ class FloatStreamReader : public StreamReader<string>{
         }
 };
 
+class IntStreamReader : public StreamReader<string>{
+    public:
+        int read(stringstream* stream){
+            int number;
+            *stream >> number;
+            return number;
+        }
+};
+
 class StringStreamReader : public StreamReader<string>{
     public:
         string read(stringstream* stream){

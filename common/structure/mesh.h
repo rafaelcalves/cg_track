@@ -99,6 +99,8 @@ class Mesh {
                     shader->setInt("textureId", material->textureId);
                     shader->setVec3("ambient", material->ambient);
                     shader->setVec3("diffuse", material->diffuse);
+                    shader->setVec3("specular", material->specular);
+                    shader->setFloat("exponent", material->exponent);
                     glBindTexture(GL_TEXTURE_2D, material->textureId);
                 }
                 glDrawArrays(GL_TRIANGLES, 0, group -> fullSize);

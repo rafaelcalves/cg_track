@@ -31,7 +31,7 @@ vector<Mesh*>* shots = new vector<Mesh*>();
 Scene* scene;
 
 int main () {
-    CfgReader config("resources/config/mesa.cfg");
+    CfgReader config("resources/config/paintball.cfg");
     scene = config.read();
 
     glfwSetCursorPosCallback(scene -> window, onMouse);

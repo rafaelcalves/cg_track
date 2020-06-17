@@ -97,6 +97,8 @@ class Mesh {
                 if(material){
                     glActiveTexture(GL_TEXTURE0 + material->textureId);
                     shader->setInt("textureId", material->textureId);
+                    shader->setVec3("ambient", material->ambient);
+                    shader->setVec3("diffuse", material->diffuse);
                     glBindTexture(GL_TEXTURE_2D, material->textureId);
                 }
                 glDrawArrays(GL_TRIANGLES, 0, group -> fullSize);

@@ -57,7 +57,7 @@ public:
 
         GLuint vertex, fragment;
         GLint success;
-        GLchar infoLog[512];
+        GLchar infoLog[1024];
 
         // Vertex Shader
         vertex = glCreateShader( GL_VERTEX_SHADER );
@@ -68,7 +68,7 @@ public:
         glGetShaderiv( vertex, GL_COMPILE_STATUS, &success );
         if ( !success )
         {
-            glGetShaderInfoLog( vertex, 512, nullptr, infoLog );
+            glGetShaderInfoLog( vertex, 1024, nullptr, infoLog );
             std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
         }
 
@@ -80,7 +80,7 @@ public:
         glGetShaderiv( fragment, GL_COMPILE_STATUS, &success );
         if ( !success )
         {
-            glGetShaderInfoLog( fragment, 512, nullptr, infoLog );
+            glGetShaderInfoLog( fragment, 1024, nullptr, infoLog );
             std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
         }
 
@@ -95,7 +95,7 @@ public:
         glGetProgramiv( this->program, GL_LINK_STATUS, &success );
         if ( !success )
         {
-            glGetProgramInfoLog( this->program, 512, nullptr, infoLog );
+            glGetProgramInfoLog( this->program, 1024, nullptr, infoLog );
             std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
         }
 

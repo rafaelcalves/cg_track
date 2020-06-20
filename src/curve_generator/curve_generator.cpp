@@ -78,7 +78,7 @@ int main() {
 
     glViewport(0, 0, screenWidth, screenHeight);
 
-    Shader coreShader("Shaders/Core/core.vs", "Shaders/Core/core.fs");
+    Shader coreShader("Shaders/Core/core.vs" , "Shaders/Core/core.fs");
     coreShader.Use();
 
     glGenVertexArrays(1, &vao);

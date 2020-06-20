@@ -12,7 +12,7 @@
 
 using namespace std;
 
-class txtWriter
+class TXTWriter
 {
 
 public:

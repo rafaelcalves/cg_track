@@ -16,21 +16,23 @@ class TXTWriter
 {
 
 public:
-    ofstream TXTFile;
+    ofstream myfile;
 
     TXTWriter() {
     }
 
     void createTXTFile() {
-        TXTFile.open("ourCurve.txt");
+        myfile.open ("originalCurve.txt");
+        myfile << "Writing this to a file.\n";
+        myfile.close();
     }
 
     void addPoint(float x, float y, float z){
-        TXTFile << "v " << x << " " << z << " " << y << endl;
+        myfile << "v " << x << " " << z << " " << y << endl;
     }
 
     void closeTXTFile() {
-        TXTFile.close();
+        myfile.close();
     }
 };
 

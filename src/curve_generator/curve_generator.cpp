@@ -5,17 +5,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include <string>
-#include <vector>
 #include <fstream>
 #include <sstream>
+#include <string>
+#include <vector>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "structure_curve/shader.h"
 #include "structure_curve/MTLWriter.h"
-#include "structure_curve/txtWriter.h"
+#include "structure_curve/TXTWriter.h"
 #include "structure_curve/OBJWriter.h"
 
 #define PI  3.14159265359
@@ -78,7 +78,7 @@ int main() {
 
     glViewport(0, 0, screenWidth, screenHeight);
 
-    Shader coreShader("Shaders/Core/core.vs" , "Shaders/Core/core.fs");
+    Shader coreShader("Shaders/Core/core.vs", "Shaders/Core/core.fs");
     coreShader.Use();
 
     glGenVertexArrays(1, &vao);
@@ -166,7 +166,6 @@ int getZone(float x, float y) {
         return 2;
     }
 }
-
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         double xpos, ypos;
@@ -198,6 +197,9 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         }
     }
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+
+        cout << "direito" << endl;
+
         draw = true;
 
         originalCurve = generateCurve(selectedPoints);

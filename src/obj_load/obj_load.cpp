@@ -21,8 +21,6 @@ void configureShader(glm::mat4* model);
 void shot();
 void drawObject(Mesh *mesh);
 
-
-//testeeeee
 bool firstMouse = true;
 
 // timing

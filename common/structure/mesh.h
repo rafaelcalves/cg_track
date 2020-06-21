@@ -62,11 +62,11 @@ class Mesh {
                 vector<GLfloat>* vboVector = new vector<GLfloat>();
                 for (auto &face : *group -> faces){
                     for (int i = 0; i < face -> getVertices() -> size(); i++) {
-                        int index = face->getVertices() -> at(i) -1;
+                        int index = handleIndex(face->getVertices()->at(i), this->vertices->size());
                         push3DAttributeToVector(vboVector,index, this -> vertices);
                         
                         if(!face->getTextures() -> empty()){
-                            index = face->getTextures() -> at(i) -1;
+                            index = handleIndex(face->getTextures() -> at(i), this->mappings->size());
                             push2DAttributeToVector(vboVector,index, this -> mappings);
                         } else {
                             vboVector -> push_back(.5);
@@ -74,7 +74,7 @@ class Mesh {
                         }
 
                         if(!face->getNormals() -> empty()){
-                            index = face->getNormals() -> at(i) -1;
+                            index = handleIndex(face->getNormals() -> at(i), this->normals->size());
                             push3DAttributeToVector(vboVector,index, this -> normals);
                         }
                     }
@@ -85,6 +85,12 @@ class Mesh {
                 bindVbo(vboVector, group);
             }
         }
+
+    int handleIndex(int index, int targetSize) const {
+        if(index > 0) index-=1;
+        else index = targetSize + index;
+        return index;
+    }
 
         void draw(Shader* shader) {
             for (auto &group : *groups){

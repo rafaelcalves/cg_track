@@ -22,7 +22,7 @@ public:
     }
 
     void createTXTFile() {
-        TXTFile.open("ourCurve.txt");
+        TXTFile.open("../../obj_load/resources/curve/ourCurve.txt");
     }
 
     void addPoint(float x, float y, float z){

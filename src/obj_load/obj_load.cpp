@@ -19,7 +19,7 @@ void onZoom(GLFWwindow* window, double xoffset, double yoffset);
 void onKeyPress();
 void configureShader(glm::mat4* model);
 void shot();
-void drawObject(Mesh *shot);
+void drawObject(Mesh *mesh);
 
 
 //testeeeee
@@ -33,7 +33,7 @@ vector<Mesh*>* shots = new vector<Mesh*>();
 Scene* scene;
 
 int main () {
-    CfgReader config("resources/config/paintball.cfg");
+    CfgReader config("resources/config/curve.cfg");
     scene = config.read();
 
     glfwSetCursorPosCallback(scene -> window, onMouse);
@@ -74,14 +74,14 @@ int main () {
 	return 0;
 }
 
-void drawObject(Mesh *shot) {
-    shot -> setup();
+void drawObject(Mesh *mesh) {
+    mesh -> setup();
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, shot->model.translate);
-    model = glm::rotate(model, glm::radians(*shot->model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::scale(model, glm::vec3(*shot->model.scale, *shot->model.scale, *shot->model.scale));
+    model = glm::translate(model, mesh->model.translate);
+    model = glm::rotate(model, glm::radians(*mesh->model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::scale(model, glm::vec3(*mesh->model.scale, *mesh->model.scale, *mesh->model.scale));
     configureShader(&model);
-    shot -> draw(scene -> shader);
+    mesh -> draw(scene -> shader);
 }
 
 void configureShader(glm::mat4* model){

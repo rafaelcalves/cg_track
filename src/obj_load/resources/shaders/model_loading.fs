@@ -21,11 +21,20 @@ void main(){
     float specularFactor = dotProductSpecular * exponent;
 	vec3 specularLight = specular * specularFactor;
 
-    float distanceToLight = length(camera - positionEye);
+    float distanceToLight = distance(camera, positionEye);
     float attenuation = 1.0f / pow(distanceToLight, 2);
+
+    // Fog parameters, could make them uniforms and pass them into the fragment shader
+    float fog_maxdist = 20.0;
+    float fog_mindist = 0.1;
+    vec4  fog_colour = vec4(0.4, 0.4, 0.4, 1.0);
+
+    // Calculate fog
+    float fog_factor = (fog_maxdist - distanceToLight) / (fog_maxdist - fog_mindist);
+    fog_factor = clamp(fog_factor, 0.0, 1.0);
 
     vec3 light = ambientLight + attenuation*(specularLight + diffuseLight);
 
     vec4 tex = texture( textureId, texCoord );
-    color = vec4(light, 1.0f) * tex;
+    color = mix(vec4(light, 1.0f),tex,.5f) + (1-fog_factor)*fog_colour;
 }

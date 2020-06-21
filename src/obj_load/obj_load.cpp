@@ -39,8 +39,8 @@ int main () {
     glfwSetCursorPosCallback(scene -> window, onMouse);
     glfwSetScrollCallback(scene -> window, onZoom);
 
-    scene->shader->setFloat("ambientIntensity", 2.0f);
-    scene->shader->setFloat("lightIntensity", 3.0f);
+    scene->shader->setFloat("ambientIntensity", .8f);
+    scene->shader->setFloat("lightIntensity", .2f);
 
     while (!glfwWindowShouldClose (scene -> window)) {
         float currentFrame = glfwGetTime();

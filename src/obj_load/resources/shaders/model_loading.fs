@@ -25,9 +25,9 @@ void main(){
     float attenuation = 1.0f / pow(distanceToLight, 2);
 
     // Fog parameters, could make them uniforms and pass them into the fragment shader
-    float fog_maxdist = 20.0;
+    float fog_maxdist = 200.0;
     float fog_mindist = 0.1;
-    vec4  fog_colour = vec4(0.4, 0.4, 0.4, 1.0);
+    vec4  fog_colour = vec4(0.0f, 0.3f, 0.6f, 1.0f);
 
     // Calculate fog
     float fog_factor = (fog_maxdist - distanceToLight) / (fog_maxdist - fog_mindist);
@@ -36,5 +36,5 @@ void main(){
     vec3 light = ambientLight + attenuation*(specularLight + diffuseLight);
 
     vec4 tex = texture( textureId, texCoord );
-    color = mix(vec4(light, 1.0f),tex,.5f) + (1-fog_factor)*fog_colour;
+    color = mix(mix(vec4(light, 1.0f),tex,.9f),fog_colour,1-fog_factor);
 }

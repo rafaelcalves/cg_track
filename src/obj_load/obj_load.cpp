@@ -57,7 +57,7 @@ int main () {
         onKeyPress();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        scene -> shader -> setVec3("camera", scene->camera->Position);
+        scene -> shader -> setVec3("camera", scene->camera->Front);
 
         for (auto &object : *scene -> objects) {
             if(object -> model.visible) {

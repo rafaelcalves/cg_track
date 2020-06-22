@@ -1,7 +1,3 @@
-//
-// Created by Fabiane Kuhn on 20/06/20.
-//
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -114,7 +110,6 @@ int main() {
 }
 
 std::vector<GLfloat>* convertToFloat(std::vector<glm::vec3*>* points) {
-    //convert from vec3 to GLfloat
     std:vector<GLfloat>* temp = new std::vector<GLfloat>();
 
     for (int i = 0; i < points->size(); i++) {
@@ -174,7 +169,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
         glm::vec3* point = new glm::vec3(xpos, ypos, 0.0);
         selectedPoints->push_back(point);
-        cout << "ponto registrado" << endl;
+        cout << "ponto registrado com sucesso" << endl;
         cout << "x = " << xpos << endl;
         cout << "y = " << ypos << endl;
 
@@ -198,7 +193,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     }
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
 
-        cout << "direito" << endl;
+        cout << "geração da curva" << endl;
 
         draw = true;
 
@@ -268,7 +263,7 @@ vector<glm::vec3*>* generateCurve(vector<glm::vec3*>* points) {
         }
     }
     TXTWriter.closeTXTFile();
-    cout << "Curva gerada com sucesso" << endl;
+    cout << "Curva gerada com sucesso. TXT gravado" << endl;
     return calculatedCurve;
 }
 
@@ -324,19 +319,19 @@ vector<glm::vec3*>* generateFinalCurve(vector<glm::vec3*>* internalCurve, vector
     int index = 1;
 
     for (; i < internalCurve->size() - 2; i += 2) {
-        // Ponto Interno 1
+        // First internal point
         finalPoints->push_back(internalCurve->at(i));
         finalPoints->push_back(internalCurve->at(i + 1));
 
         glm::vec3* a_int = internalCurve->at(i);
 
-        // Ponto Interno 2
+        // Second internal point
         finalPoints->push_back(internalCurve->at(i + 2));
         finalPoints->push_back(internalCurve->at(i + 3));
 
         glm::vec3* b_int = internalCurve->at(i + 2);
 
-        // Ponto Externo 1
+        // First external point
         finalPoints->push_back(externalCurve->at(i));
         finalPoints->push_back(externalCurve->at(i + 1));
 
@@ -344,24 +339,24 @@ vector<glm::vec3*>* generateFinalCurve(vector<glm::vec3*>* internalCurve, vector
 
         OBJWriter.addFaces(index, externalCurveSize, ++faces, 1);
 
-        // Ponto Interno 2
+        // Second internal point
         finalPoints->push_back(internalCurve->at(i + 2));
         finalPoints->push_back(internalCurve->at(i + 3));
 
-        // Ponto Externo 2
+        // Second external point
         finalPoints->push_back(externalCurve->at(i + 2));
         finalPoints->push_back(externalCurve->at(i + 3));
 
         glm::vec3* d_ext = externalCurve->at(i + 2);
 
-        // Ponto Externo 1
+        // First external point
         finalPoints->push_back(externalCurve->at(i));
         finalPoints->push_back(externalCurve->at(i + 1));
 
         OBJWriter.addFaces(index, externalCurveSize, ++faces, 2);
 
         //get vectors for the normals
-        //y and z are inversed to modify axis
+        //y and z are inverted to modify axis
         glm::vec3 ab = glm::vec3(b_int->x - a_int->x, b_int->z - a_int->z, b_int->y - a_int->y);
         glm::vec3 ac = glm::vec3(c_ext->x - a_int->x, c_ext->z - a_int->z, c_ext->y - a_int->y);
         glm::vec3 dc = glm::vec3(c_ext->x - d_ext->x, c_ext->z - d_ext->z, c_ext->y - d_ext->y);
@@ -375,20 +370,20 @@ vector<glm::vec3*>* generateFinalCurve(vector<glm::vec3*>* internalCurve, vector
         index++;
     }
     cout << i << " , " << index << endl;
-    // O trecho abaixo liga os últimos pontos com primeiro os primeiros
-    // Ponto Interno 1
+    // Connect last point with the fist to close the road
+    // First internal point
     finalPoints->push_back(internalCurve->at(i));
     finalPoints->push_back(internalCurve->at(i + 1));
 
     glm::vec3* a_int = internalCurve->at(i);
 
-    // Ponto Interno 2
+    // Second internal point
     finalPoints->push_back(internalCurve->at(0));
     finalPoints->push_back(internalCurve->at(1));
 
     glm::vec3* b_int = internalCurve->at(0);
 
-    // Ponto Externo 1
+    // First external point
     finalPoints->push_back(externalCurve->at(i));
     finalPoints->push_back(externalCurve->at(i + 1));
 
@@ -396,23 +391,23 @@ vector<glm::vec3*>* generateFinalCurve(vector<glm::vec3*>* internalCurve, vector
 
     OBJWriter.addFaces(index, externalCurveSize, ++faces, 3);
 
-    // Ponto Interno 2
+    // Second internal point
     finalPoints->push_back(internalCurve->at(0));
     finalPoints->push_back(internalCurve->at(1));
 
-    // Ponto Externo 2
+    // Second external point
     finalPoints->push_back(externalCurve->at(0));
     finalPoints->push_back(externalCurve->at(1));
 
     glm::vec3* d_ext = externalCurve->at(0);
 
-    // Ponto Externo 1
+    // First external point
     finalPoints->push_back(externalCurve->at(i));
     finalPoints->push_back(externalCurve->at(i + 1));
 
     OBJWriter.addFaces(index, externalCurveSize, ++faces, 4);
     //get vectors for the normals
-    //y and z are inversed to modify axis
+    //y and z are inverted to modify axis
     glm::vec3 ab = glm::vec3(a_int->x - b_int->x, a_int->z - b_int->z, a_int->y - b_int->y);
     glm::vec3 ac = glm::vec3(a_int->x - c_ext->x, a_int->z - c_ext->z, a_int->y - c_ext->y);
     glm::vec3 dc = glm::vec3(d_ext->x - c_ext->x, d_ext->z - c_ext->z, d_ext->y - c_ext->y);

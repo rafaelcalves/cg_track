@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 #include <common/controls.hpp>
 
-#define DEFAULT_WINDOW_TITLE "Trabalho GA"
+#define DEFAULT_WINDOW_TITLE "Trabalho GB - Pista de corrida"
 
 class GlfwConfig {
     public:

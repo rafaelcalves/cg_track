@@ -1,8 +1,6 @@
 #ifndef CG_TRACK_CFGREADER_H
 #define CG_TRACK_CFGREADER_H
 using namespace std;
-#define OBJ_MESA "mesa/mesa01.obj"
-#define OBJ_PAINTBALL "paintball/cenaPaintball.obj"
 
 #include <common/glew_config.h>
 #include <common/glfw_config.h>

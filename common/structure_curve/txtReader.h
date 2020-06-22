@@ -1,7 +1,3 @@
-//
-// Created by Correa, Rafael on 21/06/20.
-//
-
 #ifndef CG_TRACK_TXTREADER_H
 #define CG_TRACK_TXTREADER_H
 using namespace std;

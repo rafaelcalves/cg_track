@@ -27,7 +27,6 @@ include_directories(
 	common/stb
 	common/glad
 	common/KHR
-	common/structure
 	common/structure_curve
 	.
 )
@@ -55,8 +54,7 @@ add_definitions(
 	-D_CRT_SECURE_NO_WARNINGS
 )
 
-set(EXERCISE	
-	obj_load
+set(EXERCISE
 	curve_generator
 )
 

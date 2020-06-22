@@ -47,7 +47,10 @@ int main () {
     glfwSetScrollCallback(scene -> window, onZoom);
 
     scene->shader->setFloat("ambientIntensity", .8f);
-    scene->shader->setFloat("lightIntensity", .2f);
+    scene->shader->setFloat("diffuseIntensity", .2f);
+    scene->shader->setFloat("fogMaxDistance", 200.0f);
+    scene->shader->setFloat("fogMinDistance", .1f);
+    scene->shader->setVec4("fogColor", glm::vec4(.0f, 0.3f, 0.6f, 1.0f));
 
     while (!glfwWindowShouldClose (scene -> window)) {
         float currentFrame = glfwGetTime();

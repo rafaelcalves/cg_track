@@ -5,36 +5,59 @@ in vec3 positionEye, normalEye;
 
 out vec4 color;
 uniform sampler2D textureId;
-uniform float ambientIntensity, colorPercentage, lightIntensity, exponent;
-uniform vec3 camera, ambient, diffuse, specular;
+uniform float ambientIntensity, diffuseIntensity, exponent, fogMaxDistance, fogMinDistance;
+uniform vec3 camera, ambientK, diffuseK, specularK;
+uniform vec4 fogColor;
+
+vec3 getAmbientLight();
+vec3 getDiffuseLight(vec3 lightDirection);
+vec3 getSpecularLight(vec3 lightDirection);
+float getLightAttenuation(float distanceToLight);
+vec3 calculateLight(float distanceToLight);
+float getFogFactor(float distanceToLight);
 
 void main(){
-    vec3 ambientLight = ambientIntensity * ambient;
+    float distanceToLight = distance(camera, positionEye);
+    float fogFactor = getFogFactor(distanceToLight);
+    vec3 light = calculateLight(distanceToLight);
 
-    vec3 lightDirection = normalize(camera - positionEye);
-    float diffuseIntensity = max(dot(lightDirection, normalEye), 0.0f);
-    vec3 diffuseLight = lightIntensity * diffuse * diffuseIntensity;
+    vec4 tex = texture( textureId, texCoord );
+    color = mix(mix(vec4(light, .7f),tex,.9f),fogColor,1-fogFactor);
+}
 
+vec3 getAmbientLight(){
+    return ambientIntensity * ambientK;
+}
+
+vec3 getDiffuseLight(vec3 lightDirection){
+    float diffuseFactor = max(dot(lightDirection, normalEye), 0.0f);
+    return diffuseIntensity * diffuseK * diffuseFactor;
+}
+
+vec3 getSpecularLight(vec3 lightDirection){
     vec3 viewNormalized = normalize(positionEye);
     vec3 reflectionEye = reflect(-lightDirection, normalEye);
     float dotProductSpecular = max(dot(reflectionEye, viewNormalized), 0.0f);
     float specularFactor = dotProductSpecular * exponent;
-	vec3 specularLight = specular * specularFactor;
+    return specularK * specularFactor;
+}
 
-    float distanceToLight = distance(camera, positionEye);
-    float attenuation = 1.0f / pow(distanceToLight, 2);
+float getLightAttenuation(float distanceToLight){
+    return 1.0f / pow(distanceToLight, 2);
+}
 
-    // Fog parameters, could make them uniforms and pass them into the fragment shader
-    float fog_maxdist = 100.0;
-    float fog_mindist = 0.1;
-    vec4  fog_colour = vec4(0.0f, 0.3f, 0.6f, 1.0f);
+vec3 calculateLight(float distanceToLight){
+    vec3 lightDirection = normalize(camera - positionEye);
 
-    // Calculate fog
-    float fog_factor = (fog_maxdist - distanceToLight) / (fog_maxdist - fog_mindist);
-    fog_factor = clamp(fog_factor, 0.0, 1.0);
+    vec3 ambientLight = getAmbientLight();
+    vec3 diffuseLight = getDiffuseLight(lightDirection);
+	vec3 specularLight = getSpecularLight(lightDirection);
 
-    vec3 light = ambientLight + attenuation*(specularLight + diffuseLight);
+    float attenuation = getLightAttenuation(distanceToLight);
+    return ambientLight + attenuation*(specularLight + diffuseLight);
+}
 
-    vec4 tex = texture( textureId, texCoord );
-    color = mix(mix(vec4(light, .7f),tex,.9f),fog_colour,1-fog_factor);
+float getFogFactor(float distanceToLight){
+    float fogFactor = (fogMaxDistance - distanceToLight) / (fogMaxDistance - fogMinDistance);
+    return clamp(fogFactor, 0.0, 1.0);
 }

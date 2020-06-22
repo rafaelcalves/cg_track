@@ -8,10 +8,11 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <structure/cfgReader.h>
-//#include <structure/txtWriter.h>
+#include <structure_curve/txtReader.h>
 #include <zconf.h>
 
 #define OBJ_CUBE "cube/cube.obj"
+#define OBJ_CAR "car/Van_Delivery.obj"
 
 void onResize(GLFWwindow* window, int width, int height);
 void onMouse(GLFWwindow* window, double xpos, double ypos);
@@ -19,7 +20,9 @@ void onZoom(GLFWwindow* window, double xoffset, double yoffset);
 void onKeyPress();
 void configureShader(glm::mat4* model);
 void shot();
+void newCar();
 void drawObject(Mesh *mesh);
+void scaleCurve(vector<glm::vec3>* points, float factor);
 
 bool firstMouse = true;
 
@@ -28,11 +31,17 @@ float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
 vector<Mesh*>* shots = new vector<Mesh*>();
+vector<Mesh*>* cars = new vector<Mesh*>();
 Scene* scene;
+vector<glm::vec3>* route;
 
 int main () {
     CfgReader config("resources/config/curve.cfg");
     scene = config.read();
+
+    TxtReader curveReader("curve/ourCurve.txt");
+    route = curveReader.read();
+    scaleCurve(route,50);
 
     glfwSetCursorPosCallback(scene -> window, onMouse);
     glfwSetScrollCallback(scene -> window, onZoom);
@@ -55,11 +64,20 @@ int main () {
                 drawObject(object);
             }
         }
+        for (auto &car : *cars) {
+            if(car -> model.visible) {
+                car->model.move(deltaTime);
+                drawObject(car);
+            }
+        }
 
         for (auto &shot : *shots) {
             if(shot -> model.visible) {
                 shot->model.move(deltaTime);
                 for (auto &object : *scene -> objects) {
+                    if(shot -> handleCollision(object)) break;
+                }
+                for (auto &object : *cars) {
                     if(shot -> handleCollision(object)) break;
                 }
                 drawObject(shot);
@@ -72,11 +90,20 @@ int main () {
 	return 0;
 }
 
+void scaleCurve(vector<glm::vec3>* points, float factor) {
+    vector<glm::vec3>* scaledCurvePoints = new vector<glm::vec3>();
+
+    for (int i = 0; i < points->size(); i++) {
+        scaledCurvePoints->push_back(glm::vec3(points->at(i).x * factor, points->at(i).y, points->at(i).z * factor));
+    }
+    route = scaledCurvePoints;
+}
+
 void drawObject(Mesh *mesh) {
     mesh -> setup();
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, mesh->model.translate);
-    model = glm::rotate(model, glm::radians(*mesh->model.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, *mesh->model.rotation,  glm::vec3(0.0f,1.0f,0.0f));
     model = glm::scale(model, glm::vec3(*mesh->model.scale, *mesh->model.scale, *mesh->model.scale));
     configureShader(&model);
     mesh -> draw(scene -> shader);
@@ -103,16 +130,30 @@ void onKeyPress() {
         scene -> camera -> processKeyboard(RIGHT, deltaTime);
     if (glfwGetKey(scene -> window, GLFW_KEY_SPACE) == GLFW_PRESS)
         shot();
+    if (glfwGetKey(scene -> window, GLFW_KEY_ENTER) == GLFW_PRESS)
+        newCar();
 }
 
 void shot(){
-    Model* shotModel = new Model(0.0f, 0.80f, scene -> camera -> Position, scene -> camera -> Front);
+    Model* shotModel = new Model(0, 0.80f, scene -> camera -> Position, scene -> camera -> Front);
     ObjReader shotReader(OBJ_CUBE);
     Mesh* shot = shotReader.read(shotModel);
     shot -> model = *shotModel;
     shots->push_back(shot);
     usleep(200000);
 }
+
+void newCar(){
+    Model* carModel = new Model(0.0f, 0.03f, route->at(0));
+    ObjReader carReader(OBJ_CAR);
+    Mesh* car = carReader.read(carModel);
+    car -> model = *carModel;
+    car -> model.route = route;
+    car -> model.dynamic = true;
+    cars->push_back(car);
+    usleep(200000);
+}
+
 
 void onResize(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);

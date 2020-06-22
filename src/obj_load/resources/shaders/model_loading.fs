@@ -25,7 +25,7 @@ void main(){
     float attenuation = 1.0f / pow(distanceToLight, 2);
 
     // Fog parameters, could make them uniforms and pass them into the fragment shader
-    float fog_maxdist = 200.0;
+    float fog_maxdist = 250.0;
     float fog_mindist = 0.1;
     vec4  fog_colour = vec4(0.0f, 0.3f, 0.6f, 1.0f);
 

@@ -13,4 +13,4 @@ newmtl 02___Default
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
 	map_Ka checker.jpg
-	map_Kd checker.jpg
+#	map_Kd checker.jpg

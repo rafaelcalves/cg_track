@@ -33,14 +33,36 @@ class Model {
         int dynamic = false;
         int scenario = false;
         BoundingBox* boundingBox;
+        int iteration = 0;
+        vector<glm::vec3>* route = nullptr;
 
         void move(float deltaTime){
-            translate.x = calculateNextPosition(direction.x, translate.x);
-            translate.y = calculateNextPosition(direction.y, translate.y);
-            translate.z = calculateNextPosition(direction.z, translate.z);
             elapsedTime += deltaTime;
-            if(elapsedTime > 20)
-                visible = false;
+
+            if(route) {
+                iteration++;
+                if(iteration == route->size()) iteration=0;
+                glm::vec3 nextPosition = route->at(iteration);
+                nextPosition.y += 1.0f;
+                calculateDirection(translate, nextPosition);
+                translate = nextPosition;
+            } else {
+                if(elapsedTime > 20)
+                    visible = false;
+                translate.x = calculateNextPosition(direction.x, translate.x);
+                translate.y = calculateNextPosition(direction.y, translate.y);
+                translate.z = calculateNextPosition(direction.z, translate.z);
+            }
+
+        }
+
+        void calculateDirection(glm::vec3 position, glm::vec3 direction) {
+            GLfloat dx = direction.x - position.x;
+            GLfloat dz = direction.z - position.z;
+
+            GLfloat angle = glm::atan(dz, dx);
+
+            this-> rotation = new float(-angle + 5);
         }
 
         void handleCollision(Model* model){

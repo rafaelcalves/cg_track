@@ -28,7 +28,6 @@ include_directories(
 	common/glad
 	common/KHR
 	common/structure
-	common/structure_curve
 	.
 )
 set(ALL_LIBS
@@ -57,7 +56,6 @@ add_definitions(
 
 set(EXERCISE	
 	obj_load
-	curve_generator
 )
 
 foreach(EXERCISE ${EXERCISE})

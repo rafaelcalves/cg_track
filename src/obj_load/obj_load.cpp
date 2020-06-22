@@ -8,7 +8,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <structure/cfgReader.h>
-#include <structure_curve/txtReader.h>
+#include <structure/txtReader.h>
 #include <zconf.h>
 
 #define OBJ_CUBE "cube/cube.obj"
